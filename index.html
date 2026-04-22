@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheel of Fortune</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="main-menu">
+            <img src="logo.png" alt="Wheel of Fortune" id="game-logo">
+            <button id="start-btn" onclick="showPlayerSelection()">START GAME</button>
+        </div>
+
+        <div id="player-selection" class="hidden">
+            <h2>HOW MANY PLAYERS?</h2>
+            <div class="player-buttons">
+                <button onclick="startGame(1)">1 PLAYER</button>
+                <button onclick="startGame(2)">2 PLAYERS</button>
+                <button onclick="startGame(3)">3 PLAYERS</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <header id="status-bar">
+                <div id="p1-display" class="player-score p1-color">PLAYER 1: $<span id="p1-bank">0</span></div>
+                <div id="p2-display" class="player-score p2-color hidden">PLAYER 2: $<span id="p2-bank">0</span></div>
+                <div id="p3-display" class="player-score p3-color hidden">PLAYER 3: $<span id="p3-bank">0</span></div>
+            </header>
+
+            <div id="board-outer-frame">
+                <div id="board-neon-glow">
+                    <div id="puzzle-board"></div>
+                </div>
+            </div>
+
+            <div id="category-pill">
+                <h2 id="category-text">LOADING...</h2>
+            </div>
+
+            <div id="interaction-area">
+                <div id="action-menu">
+                    <button id="buy-vowel-btn" onclick="prepareVowelPurchase()">BUY VOWEL ($250)</button>
+                    <button id="spin-trigger">SPIN THE WHEEL</button>
+                    <button id="solve-trigger" onclick="startSolveAttempt()">SOLVE</button>
+                    <button id="play-again-btn" class="hidden" onclick="resetGame()">PLAY AGAIN</button>
+                </div>
+
+                <div id="solve-overlay" class="hidden">
+                    <h3 id="timer-text">20</h3>
+                    <input type="text" id="solve-input" placeholder="TYPE SOLUTION..." autocomplete="off">
+                    <button id="submit-solve" onclick="checkSolve()">SUBMIT</button>
+                </div>
+
+                <div id="wheel-container" class="hidden">
+                    <div id="wheel-pointer">▼</div>
+                    <img src="wheel.png" id="fortune-wheel" alt="Wheel">
+                    <div id="spin-result-overlay">
+                        <span id="spin-value-text"></span>
+                    </div>
+                </div>
+
+                <div id="keyboard-container" class="hidden">
+                    <h3 id="instruction-text">GUESS A CONSONANT</h3>
+                    <div id="keyboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edge-hover-zone">
+        <button id="edge-panel-btn" onclick="openCredits()"></button>
+    </div>
+
+    <div id="credits-modal" class="hidden-overlay" onclick="closeCredits()">
+        <div id="credits-content" onclick="event.stopPropagation()">
+            <h2>CREDITS</h2>
+            <hr>
+            <p>Inspired by the television game show <i>Wheel of Fortune.</i></p>
+            <p>All concepts, designs, trademarks, and logos are the property of <strong>Sony Pictures Television Inc.</strong> and <strong>Califon Productions, Inc.</strong></p>
+            <p>All rights reserved. This project is intended for personal use and entertainment purposes only, and is not affiliated with, endorsed by, or sponsored by <strong>Sony Pictures Entertainment.</strong></p>
+            <p>-</p>
+            <p>Game Design: Keiran Haas</p>
+            <p>Lead Developer: Keiran Haas</p>
+            <p>-</p>
+            <p>Special Thanks: The Open Source Community</p>
+            <p>Special Thanks: WheelOfFortuneAnswer.com</p>
+            <p>Version: 1.0_04.22.2026</p>
+            <p>Updated: 22 Apr. 2026</p>
+            
+            <button id="close-credits" onclick="closeCredits()">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <script src="categories/around_the_house.js"></script>
+    <script src="categories/before_and_after.js"></script>
+    <script src="categories/book_title.js"></script>
+    <script src="categories/classic_movie.js"></script>
+    <script src="categories/classic_tv.js"></script>
+    <script src="categories/college_life.js"></script>
+    <script src="categories/event.js"></script>
+    <script src="categories/family.js"></script>
+    <script src="categories/fictional_character.js"></script>
+    <script src="categories/fictional_place.js"></script>
+    <script src="categories/food_and_drink.js"></script>
+    <script src="categories/fun_and_games.js"></script>
+    <script src="categories/headline.js"></script>
+    <script src="categories/husband_and_wife.js"></script>
+    <script src="categories/in_the_kitchen.js"></script>
+    <script src="categories/landmark.js"></script>
+    <script src="categories/living_thing.js"></script>
+    <script src="categories/megaword.js"></script>
+    <script src="categories/movie_quotes.js"></script>
+    <script src="categories/movie_title.js"></script>
+    <script src="categories/occupation.js"></script>
+    <script src="categories/on_the_map.js"></script>
+    <script src="categories/people.js"></script>
+    <script src="categories/person.js"></script>
+    <script src="categories/phrase.js"></script>
+    <script src="categories/place.js"></script>
+    <script src="categories/proper_name.js"></script>
+    <script src="categories/quotation.js"></script>
+    <script src="categories/rhyme_time.js"></script>
+    <script src="categories/rock_on.js"></script>
+    <script src="categories/same_letter.js"></script>
+    <script src="categories/same_name.js"></script>
+    <script src="categories/show_biz.js"></script>
+    <script src="categories/slogan.js"></script>
+    <script src="categories/song_artist.js"></script>
+    <script src="categories/song_lyrics.js"></script>
+    <script src="categories/song_title.js"></script>
+    <script src="categories/star_and_role.js"></script>
+    <script src="categories/the_50s.js"></script>
+    <script src="categories/the_60s.js"></script>
+    <script src="categories/the_70s.js"></script>
+    <script src="categories/the_80s.js"></script>
+    <script src="categories/the_90s.js"></script>
+    <script src="categories/thing.js"></script>
+    <script src="categories/title_author.js"></script>
+    <script src="categories/title.js"></script>
+    <script src="categories/tv_show_title.js"></script>
+    <script src="categories/what_are_you_doing.js"></script>
+    <script src="categories/what_are_you_wearing.js"></script>
+    <!-- MAIN SCRIPT -->
+    <script src="script.js"></script>
+</body>
+</html>

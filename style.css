@@ -1,0 +1,372 @@
+:root {
+    --studio-bg: #050a1b;
+    --board-green: #00702b;
+    --neon-blue: #00e5ff;
+    --gold-gradient: linear-gradient(to bottom, #d4af37, #fcf6ba, #b8860b);
+    --blue-gradient: linear-gradient(to bottom, #3741d4, #bbbafc, #0b2eb8);
+}
+
+body {
+    background-color: var(--studio-bg);
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+#game-container {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+#score-display {
+    font-size: 2.2rem;
+    color: #ffd700;
+    text-shadow: 2px 2px #000;
+    margin-bottom: 20px;
+}
+
+/* Puzzle Board */
+#board-outer-frame {
+    background: var(--gold-gradient);
+    padding: 12px;
+    border-radius: 35px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+#board-neon-glow {
+    background: #000;
+    padding: 8px;
+    border-radius: 25px;
+    border: 4px solid var(--neon-blue);
+    box-shadow: inset 0 0 15px var(--neon-blue), 0 0 15px var(--neon-blue);
+}
+
+#puzzle-board {
+    display: grid;
+    grid-template-columns: repeat(14, 48px);
+    grid-template-rows: repeat(4, 62px);
+    gap: 5px;
+}
+
+.tile {
+    width: 48px;
+    height: 62px;
+    background-color: var(--board-green);
+    border: 1px solid #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 34px;
+    color: #000;
+    border-radius: 3px;
+}
+
+.tile.active { background-color: #fff; }
+.tile.hidden-letter { color: transparent; }
+.tile.dead { visibility: hidden; }
+
+#category-pill {
+    background: var(--blue-gradient);
+    padding: 5px 40px;
+    border-radius: 50px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border: 2px solid #fff;
+    min-width: 300px;
+}
+
+#category-text {
+    color: #ffffff;
+    margin: 0;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    -webkit-text-stroke: 2px black;
+}
+
+/* Interaction Controls */
+#interaction-area {
+    margin-top: 30px;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#action-menu { display: flex; gap: 15px; width: 80%; height: fit-content; }
+
+#action-menu button {
+    flex: 1;
+    padding: 18px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+#spin-trigger { background: #f1c40f; text-shadow: 2px 2px #ffffff;}
+#buy-vowel-btn { background: #3498db; color: white; text-shadow: 2px 2px #000;}
+#solve-trigger { background: #2ecc71; color: white; text-shadow: 2px 2px #000;}
+#play-again-btn { background: #9b59b6; color: white; text-shadow: 2px 2px #000;}
+
+/* Wheel */
+#wheel-container {
+    position: absolute;
+    left: 50%;
+    bottom: -450px;
+    transform: translateX(-50%);
+    transition: bottom 0.6s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#wheel-container.visible { bottom: -220px; }
+
+#fortune-wheel {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    border: 6px solid #fff;
+}
+
+#wheel-pointer {
+    font-size: 50px;
+    color: red;
+    z-index: 20;
+    margin-bottom: -35px;
+}
+
+#spin-result-overlay {
+    position: absolute;
+    top: 50px;
+    background: rgba(0,0,0,0.85);
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid #ffd700;
+}
+
+#spin-value-text { font-size: 2rem; color: #ffd700; font-weight: bold; }
+
+/* Keyboard */
+#keyboard {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px;
+    width: 785px;
+}
+
+.key {
+    padding: 15px 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #eee;
+    box-shadow: 0 4px 0 #ccc;
+}
+
+.key:active { transform: translateY(2px); box-shadow: 0 2px 0 #ccc; }
+.key:disabled { opacity: 0.2; cursor: not-allowed; box-shadow: none; }
+
+#solve-overlay { text-align: center; }
+#solve-input {
+    width: 450px;
+    padding: 12px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    border: 3px solid var(--neon-blue);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#timer-text { font-size: 2.5rem; color: #ff4757; margin: 10px 0; }
+
+.hidden { display: none !important; }
+
+/* Player Colors */
+.p1-color { color: #3498db; }
+.p2-color { color: #ff4757; }
+.p3-color { color: #f1c40f; }
+
+/* Main Menu */
+#main-menu, #player-selection {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#game-logo {
+    width: 600px;
+    max-width: 90vw;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255));
+}
+
+#start-btn, #submit-solve, .player-buttons button {
+    padding: 20px 40px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: var(--gold-gradient);
+    color: #000;
+}
+
+.player-buttons { display: flex; gap: 20px; }
+
+#status-bar {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.player-score {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.player-score.active-turn {
+    background: rgba(255, 255, 255, 0.1);
+    outline: 2px solid #fff;
+}
+
+#buy-vowel-btn:disabled {
+    background: #444 !important;
+    color: #777 !important;
+    cursor: not-allowed;
+}
+
+/* Credits Panel */
+#edge-hover-zone {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 150px; 
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#edge-panel-btn {
+    width: 6px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s;
+    
+    padding: 0;
+}
+
+#edge-hover-zone:hover #edge-panel-btn {
+    transform: translateX(0);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+#edge-panel-btn:hover {
+    background: #fff;
+    width: 10px;
+}
+
+.hidden-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+#credits-content {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 40px;
+    border-radius: 40px;
+    text-align: center;
+    color: white;
+    max-width: 600px;
+    text-shadow: 2px 2px #000;
+    
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+
+#credits-content strong {
+    font-weight: bold;
+    color: rgb(40, 255, 30);
+}
+
+#credits-content::-webkit-scrollbar {
+    display: none;
+}
+#credits-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+}
+
+#close-credits {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 50px;
+    color: white;
+
+    background: rgba(255, 255, 255, 0); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+}
+
+#close-credits:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+#close-credits:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.05);
+}
