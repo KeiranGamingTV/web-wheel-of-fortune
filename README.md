@@ -21,6 +21,7 @@
     <img src="https://img.shields.io/badge/monero-FF6600?style=for-the-badge&logo=monero&logoColor=white" height=35/>
   </a>
 </p>
+<h2 align="center">This project takes a lot of effort and time, so any amount of donation is welcome. I would be really appreciative if you donate to the project!</h2>
 
 Hey there, you found my Wheel of Fortune web game! Built entirely with HTML, CSS, and JavaScript, this project brings the classic game show mechanics directly to your browser, no download required. You can play solo or challenge your friends in local multiplayer.
 <br/>
@@ -134,15 +135,3 @@ When submitting, it helps to include:
 
 # Contributing
 Contributions are highly encouraged! Whether you want to optimize the code, improve the CSS animations, or add new puzzle categories to the `/categories` folder, feel free to fork the repository and submit a Pull Request.
-# Donating
-<p>
-  <a href="bitcoin:A_BITCOIN_ADDRESS">
-    <img src="https://img.shields.io/badge/Bitcoin (Direct Link)-000000?style=for-the-badge&logo=bitcoin&logoColor=white" height=40/>
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/Bitcoin-F7931A?style=for-the-badge&logo=bitcoin&logoColor=white" height=40/>
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/monero-FF6600?style=for-the-badge&logo=monero&logoColor=white" height=40/>
-  </a>
-</p>
