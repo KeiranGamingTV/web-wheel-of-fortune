@@ -58,6 +58,12 @@ body {
     gap: 5px;
 }
 
+@keyframes solve-flash {
+    0% { background-color: #fff; }
+    50% { background-color: var(--neon-blue); }
+    100% { background-color: #fff; }
+}
+
 .tile {
     width: 48px;
     height: 62px;
@@ -71,9 +77,19 @@ body {
     border-radius: 3px;
 }
 
-.tile.active { background-color: #fff; }
-.tile.hidden-letter { color: transparent; }
-.tile.dead { visibility: hidden; }
+.tile.active {
+    background-color: #fff;
+}
+.tile.hidden-letter {
+    color: transparent;
+}
+.tile.dead {
+    visibility: hidden;
+}
+.tile.solving-active {
+    animation: solve-flash 0.8s infinite;
+    color: #000 !important;
+}
 
 #category-pill {
     background: var(--blue-gradient);
@@ -186,7 +202,14 @@ body {
 .key:active { transform: translateY(2px); box-shadow: 0 2px 0 #ccc; }
 .key:disabled { opacity: 0.2; cursor: not-allowed; box-shadow: none; }
 
-#solve-overlay { text-align: center; }
+#solve-overlay {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    pointer-events: none;
+}
 #solve-input {
     width: 450px;
     padding: 12px;
@@ -197,7 +220,12 @@ body {
     text-transform: uppercase;
 }
 
-#timer-text { font-size: 2.5rem; color: #ff4757; margin: 10px 0; }
+#timer-text {
+    font-size: 2.5rem;
+    color: #ff4757;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(255, 71, 87, 0.6), 2px 2px 5px #000;
+}
 
 .hidden { display: none !important; }
 

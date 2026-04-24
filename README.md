@@ -106,6 +106,11 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - **Version 1.0_04.24.2026**
+  - Changed solve mechanics:
+    - Old method used your physical keyboard and a text field. It looke sloppy and didn't match the rest of the typing mechanics.
+    - New method uses the same keyboard you use for the rest of the game.
+
 ## - **Version 1.0_04.23.2026**
   - Added three categories:
     - Same Letter

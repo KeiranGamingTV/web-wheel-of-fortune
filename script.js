@@ -28,6 +28,9 @@ let currentSpinValue = 0;
 let isVowelMode = false;
 let currentWheelRotation = 0; 
 let solveTimer = null;
+let isSolving = false;
+let solveTiles = []; 
+let currentSolveIndex = 0;
 
 // DOM Elements
 const wheelImg = document.getElementById('fortune-wheel');
@@ -166,28 +169,22 @@ function checkVowelsRemaining() {
 }
 
 function handleGuess(letter) {
+    if (isSolving) {
+        handleSolveLetter(letter);
+        return;
+    }
+
     const btn = document.getElementById(`key-${letter}`);
     btn.disabled = true;
     btn.classList.add('used'); 
     
     const targets = document.querySelectorAll(`.tile[data-letter='${letter}']`);
-    const vowels = "AEIOU";
-
     if (targets.length > 0) {
         targets.forEach(t => { 
             t.classList.remove('hidden-letter'); 
             t.innerText = letter; 
         });
-
-        if (!isVowelMode) {
-            playerBanks[currentPlayer] += (currentSpinValue * targets.length);
-        }
-
-        if (!checkVowelsRemaining()) {
-            if (vowels.includes(letter) || isVowelMode) {
-                alert("NO MORE VOWELS IN THE PUZZLE!");
-            }
-        }
+        if (!isVowelMode) playerBanks[currentPlayer] += (currentSpinValue * targets.length);
     } else {
         alert(`NO ${letter}!`);
         currentPlayer = (currentPlayer + 1) % numPlayers;
@@ -195,6 +192,28 @@ function handleGuess(letter) {
     
     isVowelMode = false;
     togglePhase('menu');
+}
+
+function handleSolveLetter(letter) {
+    if (currentSolveIndex < solveTiles.length) {
+        const targetTile = solveTiles[currentSolveIndex];
+        targetTile.innerText = letter;
+        targetTile.classList.remove('hidden-letter');
+        
+        currentSolveIndex++;
+        if (currentSolveIndex >= solveTiles.length) {
+            checkSolve();
+        } else {
+            highlightCurrentSolveTile();
+        }
+    }
+}
+
+function highlightCurrentSolveTile() {
+    solveTiles.forEach(t => t.classList.remove('solving-active'));
+    if (currentSolveIndex < solveTiles.length) {
+        solveTiles[currentSolveIndex].classList.add('solving-active');
+    }
 }
 
 /* Wheel Logic */
@@ -248,7 +267,15 @@ function finalizeSpin() {
 
 /* Solve & Vowel Actions */
 function startSolveAttempt() {
+    isSolving = true;
+    currentSolveIndex = 0;
+    solveTiles = Array.from(document.querySelectorAll('.tile.active.hidden-letter'));
+    
+    if (solveTiles.length === 0) return;
+
     togglePhase('solve');
+    highlightCurrentSolveTile();
+
     let timeLeft = 20;
     const timerDisplay = document.getElementById('timer-text');
     timerDisplay.innerText = timeLeft;
@@ -256,28 +283,34 @@ function startSolveAttempt() {
     solveTimer = setInterval(() => {
         timeLeft--;
         timerDisplay.innerText = timeLeft;
-        if (timeLeft <= 0) {
-            clearInterval(solveTimer);
-            alert("OUT OF TIME!");
-            currentPlayer = (currentPlayer + 1) % numPlayers;
-            togglePhase('menu');
-        }
+        if (timeLeft <= 0) failSolve("OUT OF TIME!");
     }, 1000);
 }
 
 function checkSolve() {
     clearInterval(solveTimer);
-    const guess = document.getElementById('solve-input').value.toUpperCase().trim();
-    if (guess === currentPuzzle) {
-        document.querySelectorAll('.tile.active').forEach(t => t.classList.remove('hidden-letter'));
-        alert(`PLAYER ${currentPlayer + 1} WINS!`);
+    let isCorrect = solveTiles.every(tile => tile.innerText === tile.dataset.letter);
+
+    if (isCorrect) {
+        alert(`PLAYER ${currentPlayer + 1} SOLVED IT!`);
         togglePhase('win');
     } else {
-        alert("INCORRECT!");
-        currentPlayer = (currentPlayer + 1) % numPlayers;
-        togglePhase('menu');
+        failSolve("INCORRECT!");
     }
-    document.getElementById('solve-input').value = "";
+    isSolving = false;
+}
+
+function failSolve(msg) {
+    alert(msg);
+    clearInterval(solveTimer);
+    isSolving = false;
+    solveTiles.forEach(tile => {
+        tile.innerText = "";
+        tile.classList.add('hidden-letter');
+        tile.classList.remove('solving-active');
+    });
+    currentPlayer = (currentPlayer + 1) % numPlayers;
+    togglePhase('menu');
 }
 
 function prepareVowelPurchase() {
@@ -285,7 +318,6 @@ function prepareVowelPurchase() {
         alert("THERE ARE NO MORE VOWELS IN THE PUZZLE.");
         return;
     }
-
     if (playerBanks[currentPlayer] >= 250) {
         playerBanks[currentPlayer] -= 250;
         isVowelMode = true;
@@ -298,15 +330,15 @@ function prepareVowelPurchase() {
 function togglePhase(phase, msg = "") {
     const screens = ['action-menu', 'wheel-container', 'keyboard-container', 'solve-overlay'];
     screens.forEach(s => document.getElementById(s).classList.add('hidden'));
-    document.getElementById('wheel-container').classList.remove('visible');
 
     if (phase === 'menu') {
         document.getElementById('action-menu').classList.remove('hidden');
-        document.getElementById('spin-trigger').classList.remove('hidden');
-        document.getElementById('buy-vowel-btn').classList.remove('hidden');
-        document.getElementById('solve-trigger').classList.remove('hidden');
-        document.getElementById('play-again-btn').classList.add('hidden');
         updateUI();
+    } else if (phase === 'solve') {
+        document.getElementById('solve-overlay').classList.remove('hidden');
+        document.getElementById('keyboard-container').classList.remove('hidden');
+        document.getElementById('instruction-text').innerText = "";
+        document.querySelectorAll('.key').forEach(btn => btn.disabled = false);
     } else if (phase === 'wheel') {
         const wc = document.getElementById('wheel-container');
         wc.classList.remove('hidden');
@@ -328,9 +360,6 @@ function togglePhase(phase, msg = "") {
                 }
             }
         });
-    } else if (phase === 'solve') {
-        document.getElementById('solve-overlay').classList.remove('hidden');
-        document.getElementById('solve-input').focus();
     } else if (phase === 'win') {
         document.getElementById('action-menu').classList.remove('hidden');
         document.getElementById('spin-trigger').classList.add('hidden');
