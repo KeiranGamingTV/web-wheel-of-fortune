@@ -88,8 +88,9 @@ function resetGame() {
 function createGrid() {
     const board = document.getElementById('puzzle-board');
     board.innerHTML = "";
-    const deadSlots = [0, 13, 42, 55]; 
-    for (let i = 0; i < 56; i++) {
+    // 0 (top-left), 12 (top-right), 39 (bottom-left), 51 (bottom-right)
+    const deadSlots = [0, 12, 39, 51]; 
+    for (let i = 0; i < 52; i++) {
         const tile = document.createElement('div');
         tile.classList.add('tile');
         if (deadSlots.includes(i)) tile.classList.add('dead');
@@ -100,41 +101,107 @@ function createGrid() {
 
 function layoutLetters() {
     const words = currentPuzzle.split(" ");
-    let tileIndex = 15; 
+    const rowStartsDefault = [1, 14, 27, 40];
+    const rowStartsExpanded = [0, 13, 26, 39];
+    const rowLimitsDefault = 12;
+    const rowLimitsExpanded = 13;
     
+    let rowsUsed = [[], [], [], []];
+    let currentRow = 0;
+
     words.forEach(word => {
-        if (tileIndex + word.length > 27 && tileIndex < 28) tileIndex = 29; 
-        if (tileIndex + word.length > 41 && tileIndex < 42) tileIndex = 43;
+        let currentLineText = rowsUsed[currentRow].join(" ");
+        let spaceNeeded = currentLineText.length === 0 ? word.length : word.length + 1;
 
-        for (let char of word) {
-            const tile = document.getElementById(`tile-${tileIndex}`);
-            if (tile) {
-                tile.classList.add('active');
+        let currentLimit = (currentRow === 1 || currentRow === 2) ? rowLimitsExpanded : rowLimitsDefault;
 
-                if (/^[A-Z]$/.test(char)) {
-                    tile.classList.add('hidden-letter');
-                    tile.dataset.letter = char;
-                } else {
-                    tile.innerText = char;
-                    tile.classList.add('symbol-tile');
-                }
-                tileIndex++;
+        if (currentLineText.length + spaceNeeded <= currentLimit) {
+            rowsUsed[currentRow].push(word);
+        } else {
+            currentRow++;
+            if (currentRow < 4) {
+                rowsUsed[currentRow] = [word];
             }
         }
-        tileIndex++;
+    });
+
+    const totalLines = rowsUsed.filter(r => r.length > 0).length;
+    let activeRowIndex = totalLines <= 2 ? 1 : 0; 
+
+    rowsUsed.forEach(rowWords => {
+        if (activeRowIndex >= 4 || rowWords.length === 0) return;
+        
+        let combinedRowText = rowWords.join(" ");
+        let startTile;
+
+        if (activeRowIndex === 1 || activeRowIndex === 2) {
+            if (combinedRowText.length > rowLimitsDefault) {
+                startTile = rowStartsExpanded[activeRowIndex];
+            } else {
+                startTile = rowStartsDefault[activeRowIndex];
+            }
+        } else {
+            startTile = rowStartsDefault[activeRowIndex];
+        }
+
+        let currentTileIndex = startTile;
+
+        rowWords.forEach((word, wordIdx) => {
+            for (let char of word) {
+                const tile = document.getElementById(`tile-${currentTileIndex}`);
+                if (tile) {
+                    tile.classList.add('active');
+                    if (/^[A-Z]$/.test(char)) {
+                        tile.classList.add('hidden-letter');
+                        tile.dataset.letter = char;
+                    } else {
+                        tile.innerText = char;
+                        tile.classList.add('symbol-tile');
+                    }
+                }
+                currentTileIndex++;
+            }
+            if (wordIdx < rowWords.length - 1) {
+                currentTileIndex++;
+            }
+        });
+        activeRowIndex++;
     });
 }
 
 function createKeyboard() {
     const kb = document.getElementById('keyboard');
     kb.innerHTML = "";
-    "QWERTYUIOPASDFGHJKLZXCVBNM".split("").forEach(l => {
-        const btn = document.createElement('button');
-        btn.innerText = l;
-        btn.classList.add('key');
-        btn.id = `key-${l}`;
-        btn.onclick = () => handleGuess(l);
-        kb.appendChild(btn);
+
+    const rows = [
+        "QWERTYUIOP".split(""),
+        "ASDFGHJKL".split(""),
+        "ZXCVBNM".split("")
+    ];
+
+    rows.forEach((row, rowIndex) => {
+        if (rowIndex === 1) {
+            const spacer = document.createElement('div');
+            spacer.classList.add('key-spacer');
+            spacer.style.gridColumn = "span 1"; 
+            kb.appendChild(spacer);
+        }
+        
+        if (rowIndex === 2) {
+            const spacer = document.createElement('div');
+            spacer.classList.add('key-spacer');
+            spacer.style.gridColumn = "span 2"; 
+            kb.appendChild(spacer);
+        }
+
+        row.forEach(l => {
+            const btn = document.createElement('button');
+            btn.innerText = l;
+            btn.classList.add('key');
+            btn.id = `key-${l}`;
+            btn.onclick = () => handleGuess(l);
+            kb.appendChild(btn);
+        });
     });
 }
 
@@ -160,12 +227,9 @@ function updateUI() {
 }
 
 function checkVowelsRemaining() {
-    const activeTiles = document.querySelectorAll('.tile.active.hidden-letter');
+    const hiddenTiles = document.querySelectorAll('.tile.active.hidden-letter');
     const vowels = "AEIOU";
-    for (let tile of activeTiles) {
-        if (vowels.includes(tile.dataset.letter)) return true;
-    }
-    return false;
+    return Array.from(hiddenTiles).some(tile => vowels.includes(tile.dataset.letter));
 }
 
 function handleGuess(letter) {
@@ -179,13 +243,27 @@ function handleGuess(letter) {
     btn.classList.add('used'); 
     
     const targets = document.querySelectorAll(`.tile[data-letter='${letter}']`);
+    
     if (targets.length > 0) {
+        const dingSnd = document.getElementById('snd-ding');
+        dingSnd.currentTime = 0;
+        dingSnd.play().catch(() => {});
+
         targets.forEach(t => { 
             t.classList.remove('hidden-letter'); 
             t.innerText = letter; 
         });
+
         if (!isVowelMode) playerBanks[currentPlayer] += (currentSpinValue * targets.length);
+
+        if (!checkVowelsRemaining()) {
+            alert("THERE ARE NO MORE VOWELS IN THE PUZZLE.");
+        }
     } else {
+        const wrongSnd = document.getElementById('snd-wrong');
+        wrongSnd.currentTime = 0;
+        wrongSnd.play().catch(() => {});
+
         alert(`NO ${letter}!`);
         currentPlayer = (currentPlayer + 1) % numPlayers;
     }
@@ -225,6 +303,10 @@ document.getElementById('spin-trigger').addEventListener('click', () => {
     const spinDuration = Math.floor(Math.random() * 2000) + 5000;
     const constantSpeed = 12;
     let startTime = null;
+    
+    // Track rotation for clicking sound
+    let lastClickRotation = currentWheelRotation; 
+    const clickSnd = document.getElementById('snd-click');
 
     function animateWheel(timestamp) {
         if (!startTime) startTime = timestamp;
@@ -233,6 +315,14 @@ document.getElementById('spin-trigger').addEventListener('click', () => {
             const remaining = 1 - (elapsed / spinDuration);
             currentWheelRotation += constantSpeed * Math.pow(remaining, 2);
             wheelImg.style.transform = `rotate(${currentWheelRotation}deg)`;
+
+            // Check if wheel has rotated past a 15-degree segment (360 / 24 segments)
+            if (Math.floor(currentWheelRotation / 15) > Math.floor(lastClickRotation / 15)) {
+                clickSnd.currentTime = 0;
+                clickSnd.play().catch(() => {});
+                lastClickRotation = currentWheelRotation;
+            }
+
             requestAnimationFrame(animateWheel);
         } else {
             finalizeSpin();
@@ -314,22 +404,27 @@ function failSolve(msg) {
 }
 
 function prepareVowelPurchase() {
-    if (!checkVowelsRemaining()) {
-        alert("THERE ARE NO MORE VOWELS IN THE PUZZLE.");
-        return;
-    }
     if (playerBanks[currentPlayer] >= 250) {
         playerBanks[currentPlayer] -= 250;
         isVowelMode = true;
         updateUI();
         togglePhase('keyboard', "SELECT A VOWEL");
+    } else {
+        alert("YOU NEED $250 TO BUY A VOWEL.");
     }
 }
 
 /* UI Transitions */
 function togglePhase(phase, msg = "") {
     const screens = ['action-menu', 'wheel-container', 'keyboard-container', 'solve-overlay'];
-    screens.forEach(s => document.getElementById(s).classList.add('hidden'));
+
+    screens.forEach(s => {
+        const el = document.getElementById(s);
+        el.classList.add('hidden');
+        if (s === 'wheel-container') {
+            el.classList.remove('visible');
+        }
+    });
 
     if (phase === 'menu') {
         document.getElementById('action-menu').classList.remove('hidden');
