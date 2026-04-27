@@ -107,7 +107,15 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
-## - 🆕 **Version 1.0_04.24.2026v2**
+## - 🆕 **Version 1.0_04.27.2026**
+  - Changed keyboard layout to look like QWERTY keyboard.
+  - Added `sounds` folder. Sound effects coming soon.
+  - Fixed wheel transition bug.
+    - The wheel now slides from the bottom every time it's spun. It previously only slid on the first spin.
+  - Fixed "NO MORE VOWELS" alert bug.
+    - It now pops up after all vowels have been called. This was previously broken.
+
+## - **Version 1.0_04.24.2026v2**
   - Added Star And Role category.
 
 ## - **Version 1.0_04.24.2026**
