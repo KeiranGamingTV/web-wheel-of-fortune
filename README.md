@@ -51,48 +51,48 @@ The game includes a massive library of puzzles organized into the following 49 c
 | Classic Movie | 89 | ✅ Yes |
 | Classic TV | 352 | ✅ Yes |
 | College Life | 45 | ✅ Yes |
-| Event | 3,792 | ❌ No |
+| Event | 3,792 | ✅ Yes |
 | Family | 73 | ✅ Yes |
-| Fictional Character | 2,013 | ❌ No |
+| Fictional Character | 2,013 | ✅ Yes |
 | Fictional Place | 13 | ✅ Yes |
-| Food and Drink | 9,209 | ❌ No |
-| Fun and Games | 1,238 | ❌ No |
+| Food and Drink | 9,209 | ✅ Yes |
+| Fun and Games | 1,238 | ✅ Yes |
 | Headline | 50 | ✅ Yes |
 | Husband and Wife | 64 | ✅ Yes |
-| In the Kitchen | 790 | ❌ No |
-| Landmark | 1,298 | ❌ No |
-| Living Thing | 2,667 | ❌ No |
+| In the Kitchen | 790 | ✅ Yes |
+| Landmark | 1,298 | ✅ Yes |
+| Living Thing | 2,667 | ✅ Yes |
 | Megaword | 25 | ✅ Yes |
 | Movie Quotes | 38 | ✅ Yes |
 | Movie Title | 1,266 | ✅ Yes |
-| Occupation | 982 | ❌ No |
-| On the Map | 1,598 | ❌ No |
-| People | 2,589 | ❌ No |
-| Person | 2,337 | ❌ No |
-| Phrase | 6,576 | ❌ No |
-| Place | 4,833 | ❌ No |
-| Proper Name | 3,685 | ❌ No |
+| Occupation | 982 | ✅ Yes |
+| On the Map | 1,598 | ✅ Yes |
+| People | 2,589 | ✅ Yes |
+| Person | 2,337 | ✅ Yes |
+| Phrase | 6,576 | ✅ Yes |
+| Place | 4,833 | ✅ Yes |
+| Proper Name | 3,685 | ✅ Yes |
 | Quotation | 226 | ✅ Yes |
-| Rhyme Time | 717 | ❌ No |
+| Rhyme Time | 717 | ✅ Yes |
 | Rock On! | 45 | ✅ Yes |
 | Same Letter | 506 | ✅ Yes |
-| Same Name | 1,009 | ❌ No |
-| Show Biz | 1,244 | ❌ No |
+| Same Name | 1,009 | ✅ Yes |
+| Show Biz | 1,244 | ✅ Yes |
 | Slogan | 35 | ✅ Yes |
 | Song/Artist | 645 | ✅ Yes |
-| Song Lyrics | 749 | ❌ No |
-| Song Title | 1,036 | ❌ No |
-| Star and Role | 699 | ❌ No |
+| Song Lyrics | 749 | ✅ Yes |
+| Song Title | 1,036 | ✅ Yes |
+| Star and Role | 699 | ✅ Yes |
 | The '50s | 9 | ✅ Yes |
 | The '60s | 5 | ✅ Yes |
 | The '70s | 22 | ✅ Yes |
 | The '80s | 472 | ✅ Yes |
 | The '90s | 147 | ✅ Yes |
-| Thing | 14,803 | ❌ No |
-| Title | 1,184 | ❌ No |
+| Thing | 14,803 | ✅ Yes |
+| Title | 1,184 | ✅ Yes |
 | Title / Author | 183 | ✅ Yes |
 | TV Show Title | 602 | ✅ Yes |
-| What Are You Doing? | 7,115 | ❌ No |
+| What Are You Doing? | 7,115 | ✅ Yes |
 | What Are You Wearing? | 187 | ✅ Yes |
 <br/>
 
@@ -107,13 +107,40 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
-## - 🆕 **Version 1.0_04.27.2026**
+## - 🆕 **Version 1.0_04.28.2026**
+  - Major release and milestone for the project! 😁
+  - Added the rest of the categories:
+    - Event
+    - Fictional Character
+    - Food and Drink
+    - Fun and Games
+    - In The Kitchen
+    - Landmark
+    - Living Thing
+    - Occupation
+    - On The Map
+    - People
+    - Person
+    - Phrase
+    - Place
+    - Proper Name
+    - Same Name
+    - Show Biz
+    - Song Lyrics
+    - Song Title
+    - Thing
+    - Title
+    - What Are You Doing?
+
+## - **Version 1.0_04.27.2026**
   - Changed keyboard layout to look like QWERTY keyboard.
   - Added `sounds` folder. Sound effects coming soon.
   - Fixed wheel transition bug.
     - The wheel now slides from the bottom every time it's spun. It previously only slid on the first spin.
   - Fixed "NO MORE VOWELS" alert bug.
     - It now pops up after all vowels have been called. This was previously broken.
+  - Fixed word overflow bug for puzzle board.
+    - A lot of the longer puzzles were getting cut off at the bottom. This has been fixed.
 
 ## - **Version 1.0_04.24.2026v2**
   - Added Star And Role category.
