@@ -107,7 +107,15 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
-## - 🆕 **Version 1.0_04.28.2026**
+## - 🆕 **Version 1.0_04.28.2026_2**
+  - Added sound effects and music.
+  - Added animation to logo.
+  - Added visual effects for "BANKRUPT" and "LOSE A TURN".
+  - Changed letters to reveal one at a time instead of all at once.
+  - Fixed "NO MORE VOWELS" alert bug.
+    - Alert would pop up every time a letter was called after all vowels had been found. This has been fixed so it only happens the first time instead of every time.
+
+## - **Version 1.0_04.28.2026**
   - Major release and milestone for the project! 😁
   - Added the rest of the categories:
     - Event
