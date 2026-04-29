@@ -2,6 +2,7 @@
     --studio-bg: #050a1b;
     --board-green: #00702b;
     --neon-blue: #00e5ff;
+    --dark-blue: #1d00d7;
     --gold-gradient: linear-gradient(to bottom, #d4af37, #fcf6ba, #b8860b);
     --blue-gradient: linear-gradient(to bottom, #3741d4, #bbbafc, #0b2eb8);
 }
@@ -89,6 +90,11 @@ body {
 .tile.solving-active {
     animation: solve-flash 0.8s infinite;
     color: #000 !important;
+}
+
+.tile.revealing {
+    background-color: var(--dark-blue) !important;
+    transition: background-color 0.2s;
 }
 
 #category-pill {
@@ -254,6 +260,12 @@ body {
     width: 600px;
     max-width: 90vw;
     filter: drop-shadow(0 0 10px rgba(255, 255, 255));
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }
 
 #start-btn, #submit-solve, .player-buttons button {
@@ -404,4 +416,27 @@ body {
 #close-credits:active {
     transform: translateY(0);
     background: rgba(255, 255, 255, 0.05);
+}
+
+.special-effect-img {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 3000;
+    width: 600px; /* Adjust size as needed */
+    pointer-events: none;
+}
+
+.zoom-effect {
+    animation: zoom-sequence 3.6s ease-in-out forwards;
+}
+
+@keyframes zoom-sequence {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    8% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    12% { transform: translate(-50%, -50%) scale(1); }
+    88% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    92% { transform: translate(-50%, -50%) scale(1.2); }
+    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 }
