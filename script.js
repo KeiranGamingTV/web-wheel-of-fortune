@@ -68,11 +68,12 @@ function init() {
     const data = allCategories[Math.floor(Math.random() * allCategories.length)];
     document.getElementById('category-text').innerText = data.category;
     currentPuzzle = data.puzzles[Math.floor(Math.random() * data.puzzles.length)].toUpperCase();
-
+    
+    // Play Reveal Sound
     const revealSnd = document.getElementById('snd-reveal');
     revealSnd.currentTime = 0;
     revealSnd.play().catch(() => {});
-    
+
     wheelImg.style.transition = 'none';
     wheelImg.style.transform = 'rotate(0deg)';
 
@@ -245,6 +246,7 @@ async function handleGuess(letter) {
     btn.disabled = true;
     btn.classList.add('used'); 
     
+    // Find matching tiles and convert to an array
     let targets = Array.from(document.querySelectorAll(`.tile[data-letter='${letter}']`));
     
     if (targets.length > 0) {
@@ -279,12 +281,13 @@ async function handleGuess(letter) {
         if (!isVowelMode) {
             playerBanks[currentPlayer] += (currentSpinValue * targets.length);
         }
-        
+
         if (!hasAlertedNoVowels && !checkVowelsRemaining()) {
             alert("THERE ARE NO MORE VOWELS IN THE PUZZLE.");
-            hasAlertedNoVowels = true; // Mark as alerted so it doesn't fire again
+            hasAlertedNoVowels = true;
         }
     } else {
+        // Handle incorrect guess
         const wrongSnd = document.getElementById('snd-wrong');
         wrongSnd.currentTime = 0;
         wrongSnd.play().catch(() => {});
@@ -380,7 +383,6 @@ function finalizeSpin() {
             } else if (currentSpinValue === "LOSE A TURN") {
                 triggerSpecialEffect('loseaturn');
             } else {
-                // Fallback for any other non-numeric wedges
                 alert(currentSpinValue);
                 currentPlayer = (currentPlayer + 1) % numPlayers;
                 togglePhase('menu');
@@ -392,18 +394,15 @@ function finalizeSpin() {
 function triggerSpecialEffect(type) {
     const overlay = document.getElementById(`${type}-overlay`);
     
-    // Play sound only for Bankrupt
     if (type === 'bankrupt') {
         const bankruptSnd = document.getElementById('snd-bankrupt');
         bankruptSnd.currentTime = 0;
         bankruptSnd.play().catch(() => {});
     }
 
-    // Show and animate the image
     overlay.classList.remove('hidden');
     overlay.classList.add('zoom-effect');
 
-    // Wait for the animation to finish (approx 3.6s) before moving to next player
     setTimeout(() => {
         overlay.classList.add('hidden');
         overlay.classList.remove('zoom-effect');
@@ -421,10 +420,11 @@ function startSolveAttempt() {
     
     if (solveTiles.length === 0) return;
 
+    // Start Countdown Music
     const solveMusic = document.getElementById('snd-solve-music');
     solveMusic.currentTime = 0;
     solveMusic.play().catch(() => {});
-    
+
     togglePhase('solve');
     highlightCurrentSolveTile();
 
@@ -441,17 +441,19 @@ function startSolveAttempt() {
 
 function checkSolve() {
     clearInterval(solveTimer);
-
+    
+    // Stop Solve Music
     const solveMusic = document.getElementById('snd-solve-music');
     solveMusic.pause();
-    
+
     let isCorrect = solveTiles.every(tile => tile.innerText === tile.dataset.letter);
 
     if (isCorrect) {
+        // Play Win Sound
         const winSnd = document.getElementById('snd-win');
         winSnd.currentTime = 0;
         winSnd.play().catch(() => {});
-        
+
         alert(`PLAYER ${currentPlayer + 1} SOLVED IT!`);
         togglePhase('win');
     } else {
@@ -459,6 +461,8 @@ function checkSolve() {
         const wrongSnd = document.getElementById('snd-wrong');
         wrongSnd.currentTime = 0;
         wrongSnd.play().catch(() => {});
+
+        
     }
     isSolving = false;
 }
@@ -504,7 +508,7 @@ function togglePhase(phase, msg = "") {
 
     if (phase === 'revealLetter') {
         document.getElementById('action-menu').classList.add('hidden');
-    } else if 
+    } else if (phase === 'menu') {
         document.getElementById('action-menu').classList.remove('hidden');
         updateUI();
     } else if (phase === 'solve') {
@@ -545,7 +549,6 @@ function togglePhase(phase, msg = "") {
 
 window.onload = () => {
     const menuSnd = document.getElementById('snd-menu');
-    // Attempt autoplay; most browsers will block this until the first click
     menuSnd.play().catch(() => {
         console.log("Autoplay blocked. Music will start on first user interaction.");
         window.addEventListener('mousedown', () => {
@@ -568,6 +571,7 @@ function fadeOutMenuMusic() {
         }
     }, 50);
 }
+
 
 /* Credits Modal Logic */
 function openCredits() {
