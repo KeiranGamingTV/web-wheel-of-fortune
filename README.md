@@ -8,34 +8,34 @@
   <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E"/>
 </p>
 <p align="center">
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/Bitcoin-F7931A?style=for-the-badge&logo=bitcoin&logoColor=white" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/Solana-000?style=for-the-badge&logo=Solana&logoColor=9945FF" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/monero-FF6600?style=for-the-badge&logo=monero&logoColor=white" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/BNB-FCD535?style=for-the-badge&logo=binance&logoColor=000" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/USDC (ERC20)-1572B6?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAxNiAxNiIgaWQ9IlVzZGMtLVN0cmVhbWxpbmUtQ3J5cHRvY3VycmVuY3kiIGhlaWdodD0iMTYiIHdpZHRoPSIxNiI+CiAgPGRlc2M+CiAgICBVc2RjIFN0cmVhbWxpbmUgSWNvbjogaHR0cHM6Ly9zdHJlYW1saW5laHEuY29tCiAgPC9kZXNjPgogIDxwYXRoIGZpbGw9IiMzZTczYzQiIGQ9Ik04IDE2YzQuNDE4MyAwIDggLTMuNTgxNyA4IC04IDAgLTQuNDE4MjggLTMuNTgxNyAtOCAtOCAtOEMzLjU4MTcyIDAgMCAzLjU4MTcyIDAgOGMwIDQuNDE4MyAzLjU4MTcyIDggOCA4WiIgc3Ryb2tlLXdpZHRoPSIwLjUiPjwvcGF0aD4KICA8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNMTAuMDExMDUgOS4wNjJjMCAtMS4wNjIgLTAuNjQgLTEuNDI2IC0xLjkyIC0xLjU3OCAtMC45MTQgLTAuMTIxNSAtMS4wOTY1IC0wLjM2NCAtMS4wOTY1IC0wLjc4OSAwIC0wLjQyNSAwLjMwNSAtMC42OTggMC45MTQgLTAuNjk4IDAuNTQ4NSAwIDAuODUzNSAwLjE4MiAxLjAwNTUgMC42Mzc1IDAuMDE1OCAwLjA0NDA1IDAuMDQ0NzUgMC4wODIyIDAuMDgyOTUgMC4xMDkyNSAwLjAzODE1IDAuMDI3MSAwLjA4MzcgMC4wNDE4NSAwLjEzMDU1IDAuMDQyMjVoMC40ODc1YzAuMDI4MTUgMC4wMDA3NSAwLjA1NjE1IC0wLjAwNDIgMC4wODIzNSAtMC4wMTQ2IDAuMDI2MTUgLTAuMDEwNCAwLjA0OTk1IC0wLjAyNjA1IDAuMDY5OSAtMC4wNDU5IDAuMDE5OTUgLTAuMDE5ODUgMC4wMzU3IC0wLjA0MzYgMC4wNDYyIC0wLjA2OTcgMC4wMTA1NSAtMC4wMjYxNSAwLjAxNTY1IC0wLjA1NDE1IDAuMDE1MDUgLTAuMDgyM3YtMC4wM2MtMC4wNTk2IC0wLjMyOTU1IC0wLjIyNjM1IC0wLjYzMDIgLTAuNDc0MzUgLTAuODU1MjUgLTAuMjQ4IC0wLjIyNTA1IC0wLjU2MzQgLTAuMzYxODUgLTAuODk3MTUgLTAuMzg5MjVWNC41NzEwMDVjMCAtMC4xMjE1IC0wLjA5MTUgLTAuMjEyNSAtMC4yNDM1IC0wLjI0M2gtMC40NTc1Yy0wLjEyMTUgMCAtMC4yMTMgMC4wOTEgLTAuMjQzNSAwLjI0M1Y1LjI2OWMtMC45MTQ1IDAuMTIxIC0xLjQ5MyAwLjcyOCAtMS40OTMgMS40ODcgMCAxLjAwMSAwLjYwOSAxLjM5NTUgMS44ODkgMS41NDc1IDAuODUzNSAwLjE1MTUgMS4xMjc1IDAuMzM0IDEuMTI3NSAwLjgxOTUgMCAwLjQ4NSAtMC40MjY1IDAuODE5IC0xLjAwNTUgMC44MTkgLTAuNzkyNSAwIC0xLjA2NjUgLTAuMzMzNSAtMS4xNTggLTAuNzg5IC0wLjAzIC0wLjEyMSAtMC4xMjIgLTAuMTgyIC0wLjIxMzUgLTAuMTgyaC0wLjUxOGMtMC4wMjgxNSAtMC4wMDA3IC0wLjA1NjEgMC4wMDQzNSAtMC4wODIyIDAuMDE0OCAtMC4wMjYxNSAwLjAxMDQgLTAuMDQ5ODUgMC4wMjYwNSAtMC4wNjk4IDAuMDQ1OSAtMC4wMTk5IDAuMDE5ODUgLTAuMDM1NTUgMC4wNDM1NSAtMC4wNDYwNSAwLjA2OTY1IC0wLjAxMDUgMC4wMjYxIC0wLjAxNTYgMC4wNTQwNSAtMC4wMTQ5NSAwLjA4MjE1djAuMDNjMC4xMjE1IDAuNzU5IDAuNjA5NSAxLjMwNSAxLjYxNSAxLjQ1N3YwLjcyODVjMCAwLjEyMSAwLjA5MTUgMC4yMTI1IDAuMjQzNSAwLjI0MjVoMC40NTc1YzAuMTIxNSAwIDAuMjEzIC0wLjA5MSAwLjI0MzUgLTAuMjQyNVYxMC42N2MwLjkxNDUgLTAuMTUxNSAxLjUyMzUgLTAuNzg5IDEuNTIzNSAtMS42MDg1djAuMDAwNVoiIHN0cm9rZS13aWR0aD0iMC41Ij48L3BhdGg+CiAgPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTYuNDQ2IDEyLjI0ODVjLTIuMzc2OTggLTAuODUgLTMuNTk1OTggLTMuNDkgLTIuNzExOTggLTUuODI2NSAwLjQ1NyAtMS4yNzUgMS40NjI0OCAtMi4yNDU1IDIuNzExOTggLTIuNzAxIDAuMTIyIC0wLjA2MDUgMC4xODI1IC0wLjE1MTUgMC4xODI1IC0wLjMwMzV2LTAuNDI1YzAgLTAuMTIxIC0wLjA2MDUgLTAuMjEyIC0wLjE4MjUgLTAuMjQyNSAtMC4wMzA1IDAgLTAuMDkxNSAwIC0wLjEyMiAwLjAzIC0wLjY4NTc1IDAuMjE0MTYgLTEuMzIyNCAwLjU2MTg2NSAtMS44NzMyNyAxLjAyMzA4NSAtMC41NTA4NTUgMC40NjEyMjUgLTEuMDA1MDMgMS4wMjY4NTUgLTEuMzM2Mzg1IDEuNjY0MzE1IC0wLjMzMTM1NSAwLjYzNzUgLTAuNTMzMzQgMS4zMzQyIC0wLjU5NDMyIDIuMDUwMDUgLTAuMDYwOTggMC43MTU4NSAwLjAyMDI0NSAxLjQzNjcgMC4yMzg5OTUgMi4xMjEwNSAwLjU0OCAxLjcgMS44NTg1IDMuMDA1IDMuNTY0OTggMy41NTEgMC4xMjIgMC4wNjA1IDAuMjQ0IDAgMC4yNzQgLTAuMTIxNSAwLjAzMDUgLTAuMDMgMC4wMzA1IC0wLjA2MSAwLjAzMDUgLTAuMTIxNXYtMC40MjVjMCAtMC4wOTEgLTAuMDkxIC0wLjIxMiAtMC4xODI1IC0wLjI3M1ptMy4yMyAtOS40NjhjLTAuMTIyIC0wLjA2MSAtMC4yNDQgMCAtMC4yNzQgMC4xMjEgLTAuMDMwNSAwLjAzMDUgLTAuMDMwNSAwLjA2MSAtMC4wMzA1IDAuMTIxNXYwLjQyNWMwIDAuMTIxNSAwLjA5MSAwLjI0MjUgMC4xODI1IDAuMzAzNSAyLjM3NyAwLjg1IDMuNTk2IDMuNDkgMi43MTIgNS44MjY1IC0wLjQ1NyAxLjI3NSAtMS40NjI1IDIuMjQ1NSAtMi43MTIgMi43MDEgLTAuMTIyIDAuMDYwNSAtMC4xODI1IDAuMTUxNSAtMC4xODI1IDAuMzAzNXYwLjQyNWMwIDAuMTIxIDAuMDYwNSAwLjIxMiAwLjE4MjUgMC4yNDI1IDAuMDMwNSAwIDAuMDkxNSAwIDAuMTIyIC0wLjAzIDAuNjg1OCAtMC4yMTQxNSAxLjMyMjQ1IC0wLjU2MTg1IDEuODczMyAtMS4wMjMxIDAuNTUwODUgLTAuNDYxMiAxLjAwNTA1IC0xLjAyNjg1IDEuMzM2NCAtMS42NjQzIDAuMzMxMzUgLTAuNjM3NSAwLjUzMzM1IC0xLjMzNDIgMC41OTQzIC0yLjA1MDA1IDAuMDYxIC0wLjcxNTg1IC0wLjAyMDI1IC0xLjQzNjcgLTAuMjM5IC0yLjEyMTA1IC0wLjU0OCAtMS43MyAtMS44ODkgLTMuMDM1IC0zLjU2NSAtMy41ODFaIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=&logoColor=000" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/Xrp-black?style=for-the-badge&logo=xrp&logoColor=white" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/dogecoin-C2A633?style=for-the-badge&logo=dogecoin&logoColor=white" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/TRX-white?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyBpZD0iQ2FscXVlXzEiIGRhdGEtbmFtZT0iQ2FscXVlIDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDY0IDY0Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmMDYwYTt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPnRyb248L3RpdGxlPjxnIGlkPSJ0cm9uIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik02MS41NSwxOS4yOGMtMy0yLjc3LTcuMTUtNy0xMC41My0xMGwtLjItLjE0YTMuODIsMy44MiwwLDAsMC0xLjExLS42MmwwLDBDNDEuNTYsNywzLjYzLS4wOSwyLjg5LDBhMS40LDEuNCwwLDAsMC0uNTguMjJMMi4xMi4zN2EyLjIzLDIuMjMsMCwwLDAtLjUyLjg0bC0uMDUuMTN2LjcxbDAsLjExQzUuODIsMTQuMDUsMjIuNjgsNTMsMjYsNjIuMTRjLjIuNjIuNTgsMS44LDEuMjksMS44NmguMTZjLjM4LDAsMi0yLjE0LDItMi4xNFM1OC40MSwyNi43NCw2MS4zNCwyM2E5LjQ2LDkuNDYsMCwwLDAsMS0xLjQ4QTIuNDEsMi40MSwwLDAsMCw2MS41NSwxOS4yOFpNMzYuODgsMjMuMzcsNDkuMjQsMTMuMTJsNy4yNSw2LjY4Wm0tNC44LS42N0wxMC44LDUuMjZsMzQuNDMsNi4zNVpNMzQsMjcuMjdsMjEuNzgtMy41MS0yNC45LDMwWk03LjkxLDcsMzAuMywyNiwyNy4wNiw1My43OFoiLz48L2c+PC9zdmc+&logoColor=FF0000" height=35/>
   </a>
-  <a href="https://github.com/KeiranGamingTV/MyCryptoDonations/blob/main/addresses.md">
+  <a href="https://keirangamingtv.github.io/crypto-donation-page/">
     <img src="https://img.shields.io/badge/SUI-4DA2FF?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iMjkiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAyOSAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMi41MzYzIDE1LjAxNDJMMjIuNTM1NyAxNS4wMTU4QzI0LjAwNDQgMTYuODU3NCAyNC44ODIxIDE5LjE4OTggMjQuODgyMSAyMS43MjY4QzI0Ljg4MjEgMjQuMzAxNCAyMy45NzgxIDI2LjY2NTUgMjIuNDY5OCAyOC41MTk2TDIyLjMzOTkgMjguNjc5MkwyMi4zMDU1IDI4LjQ3NjNDMjIuMjc2MiAyOC4zMDM4IDIyLjI0MTggMjguMTI5NiAyMi4yMDE4IDI3Ljk1NEMyMS40NDcgMjQuNjM3NCAxOC45ODc2IDIxLjc5MzQgMTQuOTM5NyAxOS40OTA3QzEyLjIwNjMgMTcuOTM5OSAxMC42NDE3IDE2LjA3MjcgMTAuMjMwOSAxMy45NTExQzkuOTY1NTggMTIuNTc5MiAxMC4xNjI4IDExLjIwMTIgMTAuNTQ0IDEwLjAyMDlDMTAuOTI1MSA4Ljg0MTAzIDExLjQ5MTkgNy44NTI0NyAxMS45NzM1IDcuMjU3M0wxMS45NzM4IDcuMjU2OTJMMTMuNTQ4NCA1LjMzMTVDMTMuODI0NiA0Ljk5Mzg0IDE0LjM0MTMgNC45OTM4NCAxNC42MTc1IDUuMzMxNUwyMi41MzYzIDE1LjAxNDJaTTI1LjAyNjkgMTMuMDkwNkwyNS4wMjcyIDEzLjA4OThMMTQuNDczMSAwLjE4NDgwMkMxNC4yNzE1IC0wLjA2MTYwMDcgMTMuODk0MyAtMC4wNjE2MDA5IDEzLjY5MjggMC4xODQ4MDJMMy4xMzg1IDEzLjA5TDMuMTM4NzggMTMuMDkwN0wzLjEwNDQ0IDEzLjEzMzNDMS4xNjIyNiAxNS41NDM0IDAgMTguNjA2MSAwIDIxLjk0MDJDMCAyOS43MDUxIDYuMzA0OTggMzYgMTQuMDgyOSAzNkMyMS44NjA4IDM2IDI4LjE2NTggMjkuNzA1MSAyOC4xNjU4IDIxLjk0MDJDMjguMTY1OCAxOC42MDYyIDI3LjAwMzUgMTUuNTQzNCAyNS4wNjE0IDEzLjEzMzNMMjUuMDI2OSAxMy4wOTA2Wk01LjY2MzgxIDE0Ljk3MjdMNS42NjQyMyAxNC45NzIxTDYuNjA4MjUgMTMuODE3OEw2LjYzNjc4IDE0LjAzMDlDNi42NTkzOCAxNC4xOTk3IDYuNjg2NzggMTQuMzY5NCA2LjcxOTI4IDE0LjUzOThDNy4zMzAwOSAxNy43NDQ2IDkuNTEyMDggMjAuNDE2OSAxMy4xNjAyIDIyLjQ4NjVDMTYuMzMxMiAyNC4yOTEyIDE4LjE3NzUgMjYuMzY2NiAxOC43MDk1IDI4LjY0MjdDMTguOTMxNCAyOS41OTI2IDE4Ljk3MSAzMC41MjcyIDE4Ljg3NDkgMzEuMzQ0M0wxOC44Njg5IDMxLjM5NDhMMTguODIzMiAzMS40MTcyQzE3LjM5MTkgMzIuMTE2NCAxNS43ODMgMzIuNTA4OCAxNC4wODI2IDMyLjUwODhDOC4xMTgzMiAzMi41MDg4IDMuMjgzMDggMjcuNjgxNyAzLjI4MzA4IDIxLjcyNjhDMy4yODMwOCAxOS4xNzAxIDQuMTc0NDMgMTYuODIwOCA1LjY2MzgxIDE0Ljk3MjdaIiBmaWxsPSIjRjdGN0Y4Ii8+Cjwvc3ZnPgo=&logoColor=000" height=35/>
   </a>
 </p>
@@ -116,8 +116,11 @@ The game includes a massive library of puzzles organized into the following 49 c
 
 # 🚀 How to Play
 Because this project is built with standard front-end technologies, no complex server setup or build process is required.
-1. Clone or download this repository to your local machine.
-2. Open the project folder and launch `index.html` in your preferred browser.
+#### To run offline (Local Method): 
+  1. Clone or download this repository to your local machine.
+  2. Open the project folder and launch `index.html` in your preferred browser.
+#### To run online (Convenient Method):
+  1. Visit [the official website](https://keirangamingtv.github.io/web-wheel-of-fortune/), or access it from [my main page](https://keirangamingtv.github.io/).
 ### Gameplay Mechanics
 - Spin the Wheel: Click to spin. If you land on a cash value, guess a consonant using the on-screen keyboard. Correct guesses multiply the wedge value by the number of letter occurrences and add the total to your bank.
 - Buy a Vowel: If you have at least $250 in your bank, you can purchase a vowel (A, E, I, O, U).
