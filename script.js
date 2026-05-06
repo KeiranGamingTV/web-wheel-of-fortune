@@ -20,9 +20,11 @@ const wheelSegments = [
 ];
 
 // Game State
+let currentRound = 1;
 let numPlayers = 1;
 let currentPlayer = 0;
-let playerBanks = [0, 0, 0];
+let playerRoundBanks = [0, 0, 0];
+let playerTotalBanks = [0, 0, 0];
 let currentPuzzle = "";
 let currentSpinValue = 0;
 let isVowelMode = false;
@@ -33,11 +35,16 @@ let solveTiles = [];
 let currentSolveIndex = 0;
 let hasAlertedNoVowels = false;
 
+let isBonusRound = false;
+let bonusConsonantsPicked = 0;
+let bonusVowelsPicked = 0;
+const BONUS_CONSONANT_LIMIT = 3;
+const BONUS_VOWEL_LIMIT = 1;
+
 // DOM Elements
 const wheelImg = document.getElementById('fortune-wheel');
 const spinValueText = document.getElementById('spin-value-text');
 
-/* Menu & Initialization */
 function showPlayerSelection() {
     document.getElementById('main-menu').classList.add('hidden');
     document.getElementById('player-selection').classList.remove('hidden');
@@ -46,8 +53,9 @@ function showPlayerSelection() {
 function startGame(count) {
     fadeOutMenuMusic();
     numPlayers = count;
-    playerBanks = [0, 0, 0];
-    currentPlayer = 0;
+    playerTotalBanks = [0, 0, 0];
+    currentRound = 1;
+    isBonusRound = false;
     
     document.getElementById('player-selection').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
@@ -57,19 +65,55 @@ function startGame(count) {
         display.classList.toggle('hidden', i > numPlayers);
     }
     
-    init();
+    startRoundSequence();
+}
+
+async function startRoundSequence() {
+    playerRoundBanks = [0, 0, 0];
+    isVowelMode = false;
+    hasAlertedNoVowels = false;
+
+    if (!isBonusRound) {
+        currentPlayer = (currentRound - 1) % numPlayers;
+    }
+
+    document.getElementById('next-round-btn').classList.add('hidden');
+    document.getElementById('play-again-btn').classList.add('hidden');
+    const bonusBtn = document.getElementById('bonus-round-btn');
+    if (bonusBtn) bonusBtn.classList.add('hidden');
+    document.getElementById('game-screen').classList.add('hidden');
+    
+    const banner = document.getElementById('round-banner');
+    
+    banner.classList.remove('banner-enter', 'banner-exit');
+    
+    banner.innerText = isBonusRound ? "BONUS ROUND" : `ROUND ${currentRound}`;
+    banner.style.background = isBonusRound ? "black" : "transparent";
+    
+    void banner.offsetWidth; 
+
+    banner.classList.add('banner-enter');
+    await new Promise(r => setTimeout(r, 2000));
+    
+    banner.classList.remove('banner-enter');
+    banner.classList.add('banner-exit');
+    await new Promise(r => setTimeout(r, 600));
+
+    document.getElementById('game-screen').classList.remove('hidden');
+    
+    if (isBonusRound) {
+        initBonusRound();
+    } else {
+        init();
+    }
 }
 
 function init() {
     currentWheelRotation = 0;
-    isVowelMode = false;
-    hasAlertedNoVowels = false;
-    
     const data = allCategories[Math.floor(Math.random() * allCategories.length)];
     document.getElementById('category-text').innerText = data.category;
     currentPuzzle = data.puzzles[Math.floor(Math.random() * data.puzzles.length)].toUpperCase();
     
-    // Play Reveal Sound
     const revealSnd = document.getElementById('snd-reveal');
     revealSnd.currentTime = 0;
     revealSnd.play().catch(() => {});
@@ -80,19 +124,177 @@ function init() {
     createGrid();
     layoutLetters();
     createKeyboard();
+    
+    document.getElementById('spin-trigger').classList.remove('hidden');
+    document.getElementById('buy-vowel-btn').classList.remove('hidden');
+    document.getElementById('solve-trigger').classList.remove('hidden');
+    document.getElementById('action-menu').classList.remove('hidden');
+    
+    document.getElementById('next-round-btn').classList.add('hidden');
+    document.getElementById('play-again-btn').classList.add('hidden');
+    const bonusBtn = document.getElementById('bonus-round-btn');
+    if (bonusBtn) bonusBtn.classList.add('hidden');
+    
     updateUI();
     togglePhase('menu');
+}
+
+// Leaderboard Transition
+function showLeaderboard() {
+    const view = document.getElementById('leaderboard-view');
+    const container = document.getElementById('leaderboard-scores');
+    container.innerHTML = "";
+    
+    document.getElementById('game-screen').classList.add('hidden');
+    view.classList.remove('hidden');
+
+    const maxScore = Math.max(...playerTotalBanks);
+
+    for(let i = 0; i < numPlayers; i++) {
+        const scoreDiv = document.createElement('div');
+        scoreDiv.className = `player-score p${i+1}-color`;
+        scoreDiv.innerHTML = `PLAYER ${i+1}: $${playerTotalBanks[i].toLocaleString()}`;
+        
+        if (playerTotalBanks[i] === maxScore && maxScore > 0) {
+            scoreDiv.classList.add('leader-halo');
+        }
+        container.appendChild(scoreDiv);
+    }
+
+    setTimeout(() => {
+        view.classList.add('hidden');
+        if (currentRound < 3) {
+            currentRound++;
+            startRoundSequence();
+        } else {
+            handleBonusRoundEntry();
+        }
+    }, 5000);
+}
+
+function handleBonusRoundEntry() {
+    document.getElementById('game-screen').classList.add('hidden');
+    
+    const maxScore = Math.max(...playerTotalBanks);
+    currentPlayer = playerTotalBanks.indexOf(maxScore);
+
+    const picker = document.createElement('div');
+    picker.id = "bonus-picker";
+    picker.style = "position:fixed; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:10000; color:white; font-family:Arial Black;";
+    
+    const h2 = document.createElement('h2');
+    h2.innerText = `PLAYER ${currentPlayer + 1}: CHOOSE A CATEGORY`;
+    picker.appendChild(h2);
+
+    const btnCont = document.createElement('div');
+    btnCont.style.display = "flex";
+    btnCont.style.gap = "20px";
+
+    const choices = [...allCategories].sort(() => 0.5 - Math.random()).slice(0, 3);
+    choices.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.innerText = cat.category;
+        btn.className = "bonus-category-btn";
+        btn.onclick = () => {
+            window.selectedBonusData = cat;
+            isBonusRound = true;
+            bonusConsonantsPicked = 0;
+            bonusVowelsPicked = 0;
+            picker.remove();
+            startRoundSequence();
+        };
+        btnCont.appendChild(btn);
+    });
+
+    picker.appendChild(btnCont);
+    document.body.appendChild(picker);
+}
+
+function initBonusRound() {
+    const data = window.selectedBonusData;
+    document.getElementById('category-text').innerText = data.category;
+    currentPuzzle = data.puzzles[Math.floor(Math.random() * data.puzzles.length)].toUpperCase();
+    
+    createGrid();
+    layoutLetters();
+    createKeyboard();
+
+    const rstlne = "RSTLNE".split("");
+    rstlne.forEach(l => {
+        const targets = document.querySelectorAll(`.tile[data-letter='${l}']`);
+        targets.forEach(t => {
+            t.classList.remove('hidden-letter');
+            t.innerText = l;
+        });
+        const key = document.getElementById(`key-${l}`);
+        if(key) {
+            key.disabled = true;
+            key.classList.add('used');
+        }
+    });
+
+    togglePhase('bonus-picking');
+}
+
+function handleBonusPick(letter) {
+    const vowels = "AEIOU";
+    const isVowel = vowels.includes(letter);
+    const key = document.getElementById(`key-${letter}`);
+
+    if (isVowel && bonusVowelsPicked < BONUS_VOWEL_LIMIT) {
+        bonusVowelsPicked++;
+        key.disabled = true;
+        key.classList.add('used');
+    } else if (!isVowel && bonusConsonantsPicked < BONUS_CONSONANT_LIMIT) {
+        bonusConsonantsPicked++;
+        key.disabled = true;
+        key.classList.add('used');
+    }
+
+    if (bonusConsonantsPicked === BONUS_CONSONANT_LIMIT && bonusVowelsPicked === BONUS_VOWEL_LIMIT) {
+        revealBonusPicks();
+    } else {
+        togglePhase('bonus-picking');
+    }
+}
+
+async function revealBonusPicks() {
+    togglePhase('revealLetter');
+    const usedKeys = Array.from(document.querySelectorAll('.key.used'))
+                    .map(k => k.innerText)
+                    .filter(l => !"RSTLNE".includes(l));
+
+    for (const letter of usedKeys) {
+        let targets = Array.from(document.querySelectorAll(`.tile[data-letter='${letter}']`));
+        if (targets.length > 0) {
+            for (const t of targets) {
+                t.classList.add('revealing');
+                document.getElementById('snd-ding').currentTime = 0;
+                document.getElementById('snd-ding').play().catch(() => {});
+                await new Promise(r => setTimeout(r, 750));
+                t.classList.remove('revealing', 'hidden-letter');
+                t.innerText = letter;
+            }
+        } else {
+            await new Promise(r => setTimeout(r, 500));
+        }
+    }
+
+    await new Promise(r => setTimeout(r, 4000));
+    const revealSnd = document.getElementById('snd-reveal');
+    revealSnd.currentTime = 0;
+    await revealSnd.play().catch(() => {});
+    
+    startSolveAttempt();
 }
 
 function resetGame() {
     location.reload();
 }
 
-/* Board & Keyboard Setup */
 function createGrid() {
     const board = document.getElementById('puzzle-board');
     board.innerHTML = "";
-    // 0 (top-left), 12 (top-right), 39 (bottom-left), 51 (bottom-right)
     const deadSlots = [0, 12, 39, 51]; 
     for (let i = 0; i < 52; i++) {
         const tile = document.createElement('div');
@@ -116,16 +318,13 @@ function layoutLetters() {
     words.forEach(word => {
         let currentLineText = rowsUsed[currentRow].join(" ");
         let spaceNeeded = currentLineText.length === 0 ? word.length : word.length + 1;
-
         let currentLimit = (currentRow === 1 || currentRow === 2) ? rowLimitsExpanded : rowLimitsDefault;
 
         if (currentLineText.length + spaceNeeded <= currentLimit) {
             rowsUsed[currentRow].push(word);
         } else {
             currentRow++;
-            if (currentRow < 4) {
-                rowsUsed[currentRow] = [word];
-            }
+            if (currentRow < 4) rowsUsed[currentRow] = [word];
         }
     });
 
@@ -134,22 +333,16 @@ function layoutLetters() {
 
     rowsUsed.forEach(rowWords => {
         if (activeRowIndex >= 4 || rowWords.length === 0) return;
-        
         let combinedRowText = rowWords.join(" ");
         let startTile;
 
         if (activeRowIndex === 1 || activeRowIndex === 2) {
-            if (combinedRowText.length > rowLimitsDefault) {
-                startTile = rowStartsExpanded[activeRowIndex];
-            } else {
-                startTile = rowStartsDefault[activeRowIndex];
-            }
+            startTile = (combinedRowText.length > rowLimitsDefault) ? rowStartsExpanded[activeRowIndex] : rowStartsDefault[activeRowIndex];
         } else {
             startTile = rowStartsDefault[activeRowIndex];
         }
 
         let currentTileIndex = startTile;
-
         rowWords.forEach((word, wordIdx) => {
             for (let char of word) {
                 const tile = document.getElementById(`tile-${currentTileIndex}`);
@@ -165,9 +358,7 @@ function layoutLetters() {
                 }
                 currentTileIndex++;
             }
-            if (wordIdx < rowWords.length - 1) {
-                currentTileIndex++;
-            }
+            if (wordIdx < rowWords.length - 1) currentTileIndex++;
         });
         activeRowIndex++;
     });
@@ -176,43 +367,37 @@ function layoutLetters() {
 function createKeyboard() {
     const kb = document.getElementById('keyboard');
     kb.innerHTML = "";
-
-    const rows = [
-        "QWERTYUIOP".split(""),
-        "ASDFGHJKL".split(""),
-        "ZXCVBNM".split("")
-    ];
-
+    const rows = ["QWERTYUIOP".split(""), "ASDFGHJKL".split(""), "ZXCVBNM".split("")];
     rows.forEach((row, rowIndex) => {
         if (rowIndex === 1) {
-            const spacer = document.createElement('div');
-            spacer.classList.add('key-spacer');
-            spacer.style.gridColumn = "span 1"; 
-            kb.appendChild(spacer);
+            const s = document.createElement('div'); s.classList.add('key-spacer'); s.style.gridColumn = "span 1"; kb.appendChild(s);
         }
-        
         if (rowIndex === 2) {
-            const spacer = document.createElement('div');
-            spacer.classList.add('key-spacer');
-            spacer.style.gridColumn = "span 2"; 
-            kb.appendChild(spacer);
+            const s = document.createElement('div'); s.classList.add('key-spacer'); s.style.gridColumn = "span 2"; kb.appendChild(s);
         }
-
         row.forEach(l => {
             const btn = document.createElement('button');
             btn.innerText = l;
             btn.classList.add('key');
             btn.id = `key-${l}`;
-            btn.onclick = () => handleGuess(l);
+            btn.onclick = () => {
+                if (isBonusRound && !isSolving) handleBonusPick(l);
+                else handleGuess(l);
+            };
             kb.appendChild(btn);
         });
     });
 }
 
-/* Gameplay Logic */
 function updateUI() {
     for(let i = 0; i < numPlayers; i++) {
-        document.getElementById(`p${i+1}-bank`).innerText = playerBanks[i].toLocaleString();
+        const displayAmount = isBonusRound ? playerTotalBanks[i] : playerRoundBanks[i];
+        
+        const bankElement = document.getElementById(`p${i+1}-bank`);
+        if (bankElement) {
+            bankElement.innerText = displayAmount.toLocaleString();
+        }
+        
         document.getElementById(`p${i+1}-display`).classList.remove('active-turn');
     }
     
@@ -220,13 +405,12 @@ function updateUI() {
 
     const buyBtn = document.getElementById('buy-vowel-btn');
     const hasVowelsLeft = checkVowelsRemaining();
-    
     if (!hasVowelsLeft) {
         buyBtn.disabled = true;
         buyBtn.style.opacity = "0.5";
     } else {
-        buyBtn.disabled = (playerBanks[currentPlayer] < 250);
-        buyBtn.style.opacity = "1";
+        buyBtn.disabled = (playerRoundBanks[currentPlayer] < 250 || isBonusRound);
+        buyBtn.style.opacity = isBonusRound ? "0.5" : "1";
     }
 }
 
@@ -237,65 +421,38 @@ function checkVowelsRemaining() {
 }
 
 async function handleGuess(letter) {
-    if (isSolving) {
-        handleSolveLetter(letter);
-        return;
-    }
+    if (isSolving) { handleSolveLetter(letter); return; }
 
     const btn = document.getElementById(`key-${letter}`);
     btn.disabled = true;
     btn.classList.add('used'); 
     
-    // Find matching tiles and convert to an array
     let targets = Array.from(document.querySelectorAll(`.tile[data-letter='${letter}']`));
     
     if (targets.length > 0) {
-        // Sort tiles by ID index (top-left to bottom-right)
-        targets.sort((a, b) => {
-            const indexA = parseInt(a.id.split('-')[1]);
-            const indexB = parseInt(b.id.split('-')[1]);
-            return indexA - indexB;
-        });
-
+        targets.sort((a, b) => parseInt(a.id.split('-')[1]) - parseInt(b.id.split('-')[1]));
         togglePhase('revealLetter');
-        
-        // Reveal tiles one by one
         for (const t of targets) {
-            // 1. Turn the spot blue
             t.classList.add('revealing');
-            
-            // 2. Play the ding sound
             const dingSnd = document.getElementById('snd-ding');
-            dingSnd.currentTime = 0;
-            dingSnd.play().catch(() => {});
-
-            // 3. Wait 0.75 seconds
+            dingSnd.currentTime = 0; dingSnd.play().catch(() => {});
             await new Promise(resolve => setTimeout(resolve, 750));
-
-            // 4. Reveal the letter and make it white
             t.classList.remove('revealing', 'hidden-letter'); 
             t.innerText = letter; 
         }
-
-        // Apply scoring after all letters are revealed
         if (!isVowelMode) {
-            playerBanks[currentPlayer] += (currentSpinValue * targets.length);
+            playerRoundBanks[currentPlayer] += (currentSpinValue * targets.length);
         }
-
         if (!hasAlertedNoVowels && !checkVowelsRemaining()) {
             alert("THERE ARE NO MORE VOWELS IN THE PUZZLE.");
             hasAlertedNoVowels = true;
         }
     } else {
-        // Handle incorrect guess
         const wrongSnd = document.getElementById('snd-wrong');
-        wrongSnd.currentTime = 0;
-        wrongSnd.play().catch(() => {});
-
+        wrongSnd.currentTime = 0; wrongSnd.play().catch(() => {});
         alert(`NO ${letter}!`);
         currentPlayer = (currentPlayer + 1) % numPlayers;
     }
-    
     isVowelMode = false;
     togglePhase('menu');
 }
@@ -305,34 +462,24 @@ function handleSolveLetter(letter) {
         const targetTile = solveTiles[currentSolveIndex];
         targetTile.innerText = letter;
         targetTile.classList.remove('hidden-letter');
-        
         currentSolveIndex++;
-        if (currentSolveIndex >= solveTiles.length) {
-            checkSolve();
-        } else {
-            highlightCurrentSolveTile();
-        }
+        if (currentSolveIndex >= solveTiles.length) checkSolve();
+        else highlightCurrentSolveTile();
     }
 }
 
 function highlightCurrentSolveTile() {
     solveTiles.forEach(t => t.classList.remove('solving-active'));
-    if (currentSolveIndex < solveTiles.length) {
-        solveTiles[currentSolveIndex].classList.add('solving-active');
-    }
+    if (currentSolveIndex < solveTiles.length) solveTiles[currentSolveIndex].classList.add('solving-active');
 }
 
-/* Wheel Logic */
 document.getElementById('spin-trigger').addEventListener('click', () => {
     isVowelMode = false;
     spinValueText.innerText = ""; 
     togglePhase('wheel');
-
     const spinDuration = Math.floor(Math.random() * 2000) + 5000;
     const constantSpeed = 12;
     let startTime = null;
-    
-    // Track rotation for clicking sound
     let lastClickRotation = currentWheelRotation; 
     const clickSnd = document.getElementById('snd-click');
 
@@ -343,20 +490,14 @@ document.getElementById('spin-trigger').addEventListener('click', () => {
             const remaining = 1 - (elapsed / spinDuration);
             currentWheelRotation += constantSpeed * Math.pow(remaining, 2);
             wheelImg.style.transform = `rotate(${currentWheelRotation}deg)`;
-
             const currentStep = Math.floor((currentWheelRotation + 7.5) / 15);
             const lastStep = Math.floor((lastClickRotation + 7.5) / 15);
-
             if (currentStep > lastStep) {
-                clickSnd.currentTime = 0;
-                clickSnd.play().catch(() => {});
+                clickSnd.currentTime = 0; clickSnd.play().catch(() => {});
                 lastClickRotation = currentWheelRotation;
             }
-
             requestAnimationFrame(animateWheel);
-        } else {
-            finalizeSpin();
-        }
+        } else finalizeSpin();
     }
     requestAnimationFrame(animateWheel);
 });
@@ -367,22 +508,18 @@ function finalizeSpin() {
     const centerOffset = 7.5;
     let actualDegree = (360 - stopPoint + centerOffset) % 360;
     if (actualDegree < 0) actualDegree += 360;
-    
     currentSpinValue = wheelSegments[Math.floor(actualDegree / wedgeSize)];
-    
     const displayValue = typeof currentSpinValue === 'number' ? `$${currentSpinValue.toLocaleString()}` : currentSpinValue;
     spinValueText.innerText = displayValue;
 
     setTimeout(() => {
-        if (typeof currentSpinValue === 'number') {
-            togglePhase('keyboard', `GUESS A CONSONANT (${displayValue})`);
-        } else {
+        if (typeof currentSpinValue === 'number') togglePhase('keyboard', `GUESS A CONSONANT (${displayValue})`);
+        else {
             if (currentSpinValue === "BANKRUPT") {
-                playerBanks[currentPlayer] = 0;
+                playerRoundBanks[currentPlayer] = 0;
                 triggerSpecialEffect('bankrupt');
-            } else if (currentSpinValue === "LOSE A TURN") {
-                triggerSpecialEffect('loseaturn');
-            } else {
+            } else if (currentSpinValue === "LOSE A TURN") triggerSpecialEffect('loseaturn');
+            else {
                 alert(currentSpinValue);
                 currentPlayer = (currentPlayer + 1) % numPlayers;
                 togglePhase('menu');
@@ -393,122 +530,107 @@ function finalizeSpin() {
 
 function triggerSpecialEffect(type) {
     const overlay = document.getElementById(`${type}-overlay`);
-    
     if (type === 'bankrupt') {
         const bankruptSnd = document.getElementById('snd-bankrupt');
-        bankruptSnd.currentTime = 0;
-        bankruptSnd.play().catch(() => {});
+        bankruptSnd.currentTime = 0; bankruptSnd.play().catch(() => {});
     }
-
-    overlay.classList.remove('hidden');
-    overlay.classList.add('zoom-effect');
-
+    overlay.classList.remove('hidden'); overlay.classList.add('zoom-effect');
     setTimeout(() => {
-        overlay.classList.add('hidden');
-        overlay.classList.remove('zoom-effect');
-        
+        overlay.classList.add('hidden'); overlay.classList.remove('zoom-effect');
         currentPlayer = (currentPlayer + 1) % numPlayers;
         togglePhase('menu');
     }, 3600);
 }
 
-/* Solve & Vowel Actions */
 function startSolveAttempt() {
-    isSolving = true;
-    currentSolveIndex = 0;
+    isSolving = true; currentSolveIndex = 0;
     solveTiles = Array.from(document.querySelectorAll('.tile.active.hidden-letter'));
-    
     if (solveTiles.length === 0) return;
-
-    // Start Countdown Music
     const solveMusic = document.getElementById('snd-solve-music');
-    solveMusic.currentTime = 0;
-    solveMusic.play().catch(() => {});
-
+    solveMusic.currentTime = 0; solveMusic.play().catch(() => {});
     togglePhase('solve');
     highlightCurrentSolveTile();
-
     let timeLeft = 20;
     const timerDisplay = document.getElementById('timer-text');
     timerDisplay.innerText = timeLeft;
-
     solveTimer = setInterval(() => {
-        timeLeft--;
-        timerDisplay.innerText = timeLeft;
+        timeLeft--; timerDisplay.innerText = timeLeft;
         if (timeLeft <= 0) failSolve("OUT OF TIME!");
     }, 1000);
 }
 
 function checkSolve() {
     clearInterval(solveTimer);
-    
-    // Stop Solve Music
-    const solveMusic = document.getElementById('snd-solve-music');
-    solveMusic.pause();
-
+    document.getElementById('snd-solve-music').pause();
     let isCorrect = solveTiles.every(tile => tile.innerText === tile.dataset.letter);
 
     if (isCorrect) {
-        // Play Win Sound
-        const winSnd = document.getElementById('snd-win');
-        winSnd.currentTime = 0;
-        winSnd.play().catch(() => {});
-
-        alert(`PLAYER ${currentPlayer + 1} SOLVED IT!`);
+        document.getElementById('snd-win').currentTime = 0;
+        document.getElementById('snd-win').play().catch(() => {});
+        
+        if (isBonusRound) {
+            const prize = (Math.floor(Math.random() * 13) * 5000) + 40000;
+            playerTotalBanks[currentPlayer] += prize;
+            updateUI(); 
+            alert(`YOU SOLVED IT! YOU WIN $${prize.toLocaleString()}!`);
+        } else {
+            playerTotalBanks[currentPlayer] += playerRoundBanks[currentPlayer];
+            alert(`PLAYER ${currentPlayer + 1} SOLVED IT!`);
+        }
         togglePhase('win');
     } else {
         failSolve("INCORRECT!");
-        const wrongSnd = document.getElementById('snd-wrong');
-        wrongSnd.currentTime = 0;
-        wrongSnd.play().catch(() => {});
-
-        
     }
     isSolving = false;
 }
 
 function failSolve(msg) {
-    const solveMusic = document.getElementById('snd-solve-music');
-    solveMusic.pause();
+    document.getElementById('snd-solve-music').pause();
+    const wrongSnd = document.getElementById('snd-wrong');
+    wrongSnd.currentTime = 0; 
+    wrongSnd.play().catch(() => {});
     
     alert(msg);
     clearInterval(solveTimer);
     isSolving = false;
-    solveTiles.forEach(tile => {
-        tile.innerText = "";
-        tile.classList.add('hidden-letter');
-        tile.classList.remove('solving-active');
-    });
-    currentPlayer = (currentPlayer + 1) % numPlayers;
-    togglePhase('menu');
-}
 
-function prepareVowelPurchase() {
-    if (playerBanks[currentPlayer] >= 250) {
-        playerBanks[currentPlayer] -= 250;
-        isVowelMode = true;
-        updateUI();
-        togglePhase('keyboard', "SELECT A VOWEL");
+    solveTiles.forEach(t => {
+        t.innerText = "";
+        t.classList.add('hidden-letter');
+        t.classList.remove('solving-active');
+    });
+
+    if (isBonusRound) {
+        document.querySelectorAll('.tile.active.hidden-letter').forEach(t => {
+            t.innerText = t.dataset.letter;
+            t.classList.remove('hidden-letter');
+        });
+        togglePhase('win');
     } else {
-        alert("YOU NEED $250 TO BUY A VOWEL.");
+        currentPlayer = (currentPlayer + 1) % numPlayers;
+        togglePhase('menu');
     }
 }
 
-/* UI Transitions */
+function prepareVowelPurchase() {
+    if (playerRoundBanks[currentPlayer] >= 250) {
+        playerRoundBanks[currentPlayer] -= 250;
+        isVowelMode = true;
+        updateUI();
+        togglePhase('keyboard', "SELECT A VOWEL");
+    } else alert("YOU NEED $250 TO BUY A VOWEL.");
+}
+
 function togglePhase(phase, msg = "") {
     const screens = ['action-menu', 'wheel-container', 'keyboard-container', 'solve-overlay'];
-
     screens.forEach(s => {
         const el = document.getElementById(s);
         el.classList.add('hidden');
-        if (s === 'wheel-container') {
-            el.classList.remove('visible');
-        }
+        if (s === 'wheel-container') el.classList.remove('visible');
     });
 
-    if (phase === 'revealLetter') {
-        document.getElementById('action-menu').classList.add('hidden');
-    } else if (phase === 'menu') {
+    if (phase === 'revealLetter') document.getElementById('action-menu').classList.add('hidden');
+    else if (phase === 'menu') {
         document.getElementById('action-menu').classList.remove('hidden');
         updateUI();
     } else if (phase === 'solve') {
@@ -520,6 +642,17 @@ function togglePhase(phase, msg = "") {
         const wc = document.getElementById('wheel-container');
         wc.classList.remove('hidden');
         setTimeout(() => wc.classList.add('visible'), 10);
+    } else if (phase === 'bonus-picking') {
+        document.getElementById('keyboard-container').classList.remove('hidden');
+        document.getElementById('instruction-text').innerText = "CHOOSE 3 CONSONANTS AND 1 VOWEL";
+        const vowels = "AEIOU";
+        "QWERTYUIOPASDFGHJKLZXCVBNM".split("").forEach(l => {
+            const btn = document.getElementById(`key-${l}`);
+            if (btn && !btn.classList.contains('used')) {
+                const isV = vowels.includes(l);
+                btn.disabled = isV ? (bonusVowelsPicked >= BONUS_VOWEL_LIMIT) : (bonusConsonantsPicked >= BONUS_CONSONANT_LIMIT);
+            }
+        });
     } else if (phase === 'keyboard') {
         document.getElementById('keyboard-container').classList.remove('hidden');
         document.getElementById('instruction-text').innerText = msg;
@@ -529,12 +662,8 @@ function togglePhase(phase, msg = "") {
             if (btn) {
                 const isVowel = vowels.includes(l);
                 const isUsed = btn.classList.contains('used');
-                
-                if (isUsed) {
-                    btn.disabled = true;
-                } else {
-                    btn.disabled = isVowelMode ? !isVowel : isVowel;
-                }
+                if (isUsed) btn.disabled = true;
+                else btn.disabled = isVowelMode ? !isVowel : isVowel;
             }
         });
     } else if (phase === 'win') {
@@ -542,7 +671,23 @@ function togglePhase(phase, msg = "") {
         document.getElementById('spin-trigger').classList.add('hidden');
         document.getElementById('buy-vowel-btn').classList.add('hidden');
         document.getElementById('solve-trigger').classList.add('hidden');
-        document.getElementById('play-again-btn').classList.remove('hidden');
+        
+        if (isBonusRound) {
+            document.getElementById('play-again-btn').classList.remove('hidden');
+        } else if (currentRound < 3) {
+            document.getElementById('next-round-btn').classList.remove('hidden');
+        } else {
+            let bonusBtn = document.getElementById('bonus-round-btn');
+            if (!bonusBtn) {
+                bonusBtn = document.createElement('button');
+                bonusBtn.id = "bonus-round-btn";
+                bonusBtn.innerText = "BONUS ROUND";
+                bonusBtn.className = "bonus-round-trigger-btn";
+                bonusBtn.onclick = () => showLeaderboard();
+                document.getElementById('action-menu').appendChild(bonusBtn);
+            }
+            bonusBtn.classList.remove('hidden');
+        }
         updateUI();
     }
 }
@@ -550,7 +695,6 @@ function togglePhase(phase, msg = "") {
 window.onload = () => {
     const menuSnd = document.getElementById('snd-menu');
     menuSnd.play().catch(() => {
-        console.log("Autoplay blocked. Music will start on first user interaction.");
         window.addEventListener('mousedown', () => {
             if (menuSnd.paused) menuSnd.play();
         }, { once: true });
@@ -562,28 +706,13 @@ function fadeOutMenuMusic() {
     let volume = 1.0;
     const fadeInterval = setInterval(() => {
         if (volume > 0.05) {
-            volume -= 0.05;
-            menuSnd.volume = volume;
+            volume -= 0.05; menuSnd.volume = volume;
         } else {
-            clearInterval(fadeInterval);
-            menuSnd.pause();
-            menuSnd.volume = 1.0;
+            clearInterval(fadeInterval); menuSnd.pause(); menuSnd.volume = 1.0;
         }
     }, 50);
 }
 
-
-/* Credits Modal Logic */
-function openCredits() {
-    const modal = document.getElementById('credits-modal');
-    modal.style.display = 'flex';
-}
-
-function closeCredits() {
-    const modal = document.getElementById('credits-modal');
-    modal.style.display = 'none';
-}
-
-window.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") closeCredits();
-});
+function openCredits() { document.getElementById('credits-modal').style.display = 'flex'; }
+function closeCredits() { document.getElementById('credits-modal').style.display = 'none'; }
+window.addEventListener('keydown', (e) => { if (e.key === "Escape") closeCredits(); });
