@@ -647,7 +647,6 @@ const song_titleData = {
         "PUFF THE MAGIC DRAGON",
         "PUNK ROCK GIRL",
         "PURPLE RAIN",
-        "PUT A LITTLE LOVE IN YOUR HEART",
         "QUE SERA SERA",
         "QUEEN OF THE HOUSE",
         "R.O.C.K. IN THE U.S.A.",
