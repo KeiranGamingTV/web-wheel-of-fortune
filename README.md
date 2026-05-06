@@ -77,7 +77,7 @@ The game includes a massive library of puzzles organized into the following 49 c
 | Slogan | 35 | ✅ Yes |
 | Song/Artist | 645 | ✅ Yes |
 | Song Lyrics | 749 | ✅ Yes |
-| Song Title | 1,036 | ✅ Yes |
+| Song Title | 1,035 | ✅ Yes |
 | Star and Role | 699 | ✅ Yes |
 | The '50s | 9 | ✅ Yes |
 | The '60s | 5 | ✅ Yes |
@@ -88,7 +88,7 @@ The game includes a massive library of puzzles organized into the following 49 c
 | Title | 1,184 | ✅ Yes |
 | Title / Author | 183 | ✅ Yes |
 | TV Show Title | 602 | ✅ Yes |
-| What Are You Doing? | 7,115 | ✅ Yes |
+| What Are You Doing? | 7,114 | ✅ Yes |
 | What Are You Wearing? | 187 | ✅ Yes |
 <br/>
 
@@ -106,6 +106,19 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - **Version 1.0_05.06.2026**
+  - Another major release for the project! 😄
+  - Removed two puzzles due to board overflow errors. _Might be added back later._
+    - Song Title: "PUT A LITTLE LOVE IN YOUR HEART"
+    - What Are You Doing?: "GETTING A SOFT DRINK FROM A VENDING MACHINE"
+  - Changed game to have three rounds and the bonus round!
+    - Added new "Round" transitions.
+    - Added new buttons.
+    - Introduced total winnings and round winnings.
+    - Added leaderboard after every round.
+    - Fixed UI and code bugs that came with all of this.
+  - More to come, including new UI effects, sound effects, animations! 
+
 ## - 🔨 **Version 1.0_04.28.2026_3**
   - Bug fix build
     - Website overall was being iffy, so replaced all uploaded code with my local code that I know works.
