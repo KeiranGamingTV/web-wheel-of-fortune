@@ -106,6 +106,11 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - 🔨 **Version 1.1_05.08.2026**
+  - Bug fix release.
+    - Fixed "Fictional Character" category.
+      - I realized that I accidentally copied over all of the puzzles from the "Event" category over to the "Fictional Character" category. This has been fixed and the correct puzzles have been put in.
+      
 ## - **Version 1.0_05.08.2026**
   - Added the $10,000 wedge with the proper BANKRUPT wedges.
     - This leads to the wheel technically having 72 wedges in the code instead of 24 wedges.
