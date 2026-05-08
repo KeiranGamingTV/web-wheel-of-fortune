@@ -106,6 +106,12 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - 🔨 **Version 1.2_05.08.2026**
+  - Another bug fix release.
+    - Fixed the $10,000 wedge.
+    - Fixed issue where if the puzzle was completely filled in, the round would not end.
+      - This has been fixed.
+
 ## - 🔨 **Version 1.1_05.08.2026**
   - Bug fix release.
     - Fixed "Fictional Character" category.

@@ -12,38 +12,40 @@ const allCategories = [
     what_are_you_wearingData
 ];
 
-const wheelSegments = [
+/* const wheelSegments = [
     2500, 300, 600, 300, 500, 10000, 
     550, 400, 300, 900, 500, 650, 
     900, "BANKRUPT", 600, 400, 300, "LOSE A TURN", 
     800, 350, 450, 700, 300, 600
 ];
+*/
 
+// I had to shift the wedge slices around a little bit.
 const newWheelSegments = [
-    2500, 2500, 2500,
-    300, 300, 300,
-    600, 600, 600,
-    300, 300, 300,
-    500, 500, 500,
-    "BANKRUPT", 10000, "BANKRUPT",
-    550, 550, 550,
-    400, 400, 400,
-    300, 300, 300,
-    900, 900, 900,
-    500, 500, 500,
-    650, 650, 650, 
-    900, 900, 900,
-    "BANKRUPT", "BANKRUPT", "BANKRUPT",
-    600, 600, 600,
-    400, 400, 400,
-    300, 300, 300,
-    "LOSE A TURN", "LOSE A TURN", "LOSE A TURN",
-    800, 800, 800,
-    350, 350, 350,
-    450, 450, 450,
-    700, 700, 700,
-    300, 300, 300,
-    600, 600, 600
+    2500, 2500, 300,
+    300, 300, 600,
+    600, 600, 300,
+    300, 300, 500,
+    500, 500, "BANKRUPT",
+    10000, "BANKRUPT", 550,
+    550, 550, 400,
+    400, 400, 300,
+    300, 300, 900,
+    900, 900, 500,
+    500, 500, 650,
+    650, 650, 900, 
+    900, 900, "BANKRUPT",
+    "BANKRUPT", "BANKRUPT", 600,
+    600, 600, 400,
+    400, 400, 300,
+    300, 300, "LOSE A TURN",
+    "LOSE A TURN", "LOSE A TURN", 800,
+    800, 800, 350,
+    350, 350, 450,
+    450, 450, 700,
+    700, 700, 300,
+    300, 300, 600,
+    600, 600, 2500
 ];
 
 // Game State
@@ -336,19 +338,15 @@ async function revealBonusPicks() {
     const revealSnd = document.getElementById('snd-reveal');
     const originalSrc = revealSnd.src;
 
-    // Generate a random number (1-10) to look for a file in your subfolder
-    // You can increase '10' to a higher number as you add more files
     const randomNum = Math.floor(Math.random() * 5) + 1;
     const randomPath = `sounds/good_luck/${randomNum}.wav`;
 
-    // Attempt to swap the source and play
     revealSnd.src = randomPath;
     revealSnd.currentTime = 0;
 
     try {
         await revealSnd.play();
     } catch (err) {
-        // If the random file doesn't exist or fails, revert to the original sound and play that
         revealSnd.src = originalSrc;
         revealSnd.currentTime = 0;
         await revealSnd.play().catch(() => {});
@@ -463,7 +461,6 @@ function updateUI() {
         const displayAmount = isBonusRound ? playerTotalBanks[i] : playerRoundBanks[i];
         const bankElement = document.getElementById(`p${i + 1}-bank`);
         
-        // Update the Name portion of the display as well
         const displayDiv = document.getElementById(`p${i + 1}-display`);
         displayDiv.innerHTML = `${playerNames[i]}: $<span id="p${i + 1}-bank">${displayAmount.toLocaleString()}</span>`;
 
@@ -512,6 +509,18 @@ async function handleGuess(letter) {
         if (!isVowelMode) {
             playerRoundBanks[currentPlayer] += (currentSpinValue * targets.length);
         }
+
+        const remainingHidden = document.querySelectorAll('.tile.active.hidden-letter');
+        if (remainingHidden.length === 0) {
+            document.getElementById('snd-win').currentTime = 0;
+            document.getElementById('snd-win').play().catch(() => {});
+            
+            playerTotalBanks[currentPlayer] += playerRoundBanks[currentPlayer];
+            alert(`${playerNames[currentPlayer]} REVEALED THE ENTIRE PUZZLE!`);
+            togglePhase('win');
+            return;
+        }
+
         if (!hasAlertedNoVowels && !checkVowelsRemaining()) {
             alert("THERE ARE NO MORE VOWELS IN THE PUZZLE.");
             hasAlertedNoVowels = true;
@@ -573,11 +582,13 @@ document.getElementById('spin-trigger').addEventListener('click', () => {
 
 function finalizeSpin() {
     const stopPoint = currentWheelRotation % 360;
-    const wedgeSize = 15;
-    const centerOffset = 7.5;
+    const wedgeSize = 5; 
+    const centerOffset = 2.5; 
     let actualDegree = (360 - stopPoint + centerOffset) % 360;
     if (actualDegree < 0) actualDegree += 360;
-    currentSpinValue = wheelSegments[Math.floor(actualDegree / wedgeSize)];
+
+    currentSpinValue = newWheelSegments[Math.floor(actualDegree / wedgeSize)];
+    
     const displayValue = typeof currentSpinValue === 'number' ? `$${currentSpinValue.toLocaleString()}` : currentSpinValue;
     spinValueText.innerText = displayValue;
 
