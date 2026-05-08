@@ -438,3 +438,48 @@ body {
     92% { transform: translate(-50%, -50%) scale(1.2); }
     100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 }
+
+#name-entry {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.name-input-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.name-input-group label {
+    font-size: 1.5rem;
+    color: #fff;
+    min-width: 150px;
+    text-align: right;
+}
+
+.name-input-group input {
+    padding: 10px;
+    font-size: 1.2rem;
+    font-family: 'Arial Black', sans-serif;
+    border-radius: 5px;
+    border: 2px solid var(--neon-blue);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    width: 250px;
+}
+
+#final-play-btn {
+    padding: 15px 50px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: var(--gold-gradient);
+    color: #000;
+    margin-top: 20px;
+}

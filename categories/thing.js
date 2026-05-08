@@ -3630,7 +3630,6 @@ const thingData = {
         "DIRECT SNAP",
         "DIRECT SUNLIGHT",
         "DIRECTIONS",
-        "DIRECTORÂ€˜S CHAIR",
         "DIRECTOR'S CHAIR",
         "DIRECTOR'S CUT",
         "DIRECTOR'S FILMOGRAPHY",

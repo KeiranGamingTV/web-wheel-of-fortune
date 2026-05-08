@@ -670,7 +670,7 @@ const song_titleData = {
         "RIDE LIKE THE WIND",
         "RIDERS ON THE STORM",
         "RING OF FIRE",
-        "ROCK Â€˜N' ROLL HIGH SCHOOL",
+        "ROCK 'N' ROLL HIGH SCHOOL",
         "ROCK LOBSTER",
         "ROCKET MAN",
         "ROCKIN' AROUND THE CHRISTMAS TREE",

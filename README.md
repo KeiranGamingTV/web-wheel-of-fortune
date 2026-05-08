@@ -106,6 +106,24 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - **Version 1.0_05.08.2026**
+  - Added the $10,000 wedge with the proper BANKRUPT wedges.
+    - This leads to the wheel technically having 72 wedges in the code instead of 24 wedges.
+  - Added new sound effects:
+    - "10 seconds. Good luck." randomly chosen in the bonus round. _Courtesy of Pat Sajak._
+  - Added the ability to name players instead of just being numbered.
+  - Fixed `Â€˜` issues in some puzzles.
+    - Removed puzzles:
+      - Event: "HUNDRED YEARSÂ€˜ WAR"
+      - Food and Drink: "COOKIES Â€ŒNÂ€ CREAM CUPCAKE"
+      - Food and Drink: "COOKIES Â€ŒNÂ€ CREAM CUPCAKES"
+      - Food and Drink: "FISH Â€˜N' CHIPS WITH SALT AND LEMON"
+      - Food and Drink: "FISH Â€ŒNÂ€ CHIPS WITH SALT AND LEMON"
+      - Thing: "DIRECTORÂ€˜S CHAIR"
+    - Edited puzzles:
+      - Food and Drink: "COOKIES Â€˜N' CREAM CUPCAKES" is now "COOKIES 'N' CREAM CUPCAKES"
+      - Song Title: "ROCK Â€˜N' ROLL HIGH SCHOOL" is now "ROCK 'N' ROLL HIGH SCHOOL" 
+
 ## - **Version 1.0_05.06.2026**
   - Another major release for the project! 😄
   - Removed two puzzles due to board overflow errors. _Might be added back later._

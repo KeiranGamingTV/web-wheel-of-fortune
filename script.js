@@ -19,6 +19,33 @@ const wheelSegments = [
     800, 350, 450, 700, 300, 600
 ];
 
+const newWheelSegments = [
+    2500, 2500, 2500,
+    300, 300, 300,
+    600, 600, 600,
+    300, 300, 300,
+    500, 500, 500,
+    "BANKRUPT", 10000, "BANKRUPT",
+    550, 550, 550,
+    400, 400, 400,
+    300, 300, 300,
+    900, 900, 900,
+    500, 500, 500,
+    650, 650, 650, 
+    900, 900, 900,
+    "BANKRUPT", "BANKRUPT", "BANKRUPT",
+    600, 600, 600,
+    400, 400, 400,
+    300, 300, 300,
+    "LOSE A TURN", "LOSE A TURN", "LOSE A TURN",
+    800, 800, 800,
+    350, 350, 350,
+    450, 450, 450,
+    700, 700, 700,
+    300, 300, 300,
+    600, 600, 600
+];
+
 // Game State
 let currentRound = 1;
 let numPlayers = 1;
@@ -34,6 +61,7 @@ let isSolving = false;
 let solveTiles = []; 
 let currentSolveIndex = 0;
 let hasAlertedNoVowels = false;
+let playerNames = ["PLAYER 1", "PLAYER 2", "PLAYER 3"];
 
 let isBonusRound = false;
 let bonusConsonantsPicked = 0;
@@ -51,20 +79,43 @@ function showPlayerSelection() {
 }
 
 function startGame(count) {
-    fadeOutMenuMusic();
     numPlayers = count;
+    document.getElementById('player-selection').classList.add('hidden');
+    const nameEntry = document.getElementById('name-entry');
+    const container = document.getElementById('name-inputs-container');
+    container.innerHTML = "";
+    nameEntry.classList.remove('hidden');
+
+    for (let i = 1; i <= count; i++) {
+        const div = document.createElement('div');
+        div.className = "name-input-group";
+        div.innerHTML = `
+            <label>Player ${i}:</label>
+            <input type="text" id="p${i}-name-input" placeholder="NAME" autocomplete="off">
+        `;
+        container.appendChild(div);
+    }
+}
+
+function finalizeStart() {
+    fadeOutMenuMusic();
     playerTotalBanks = [0, 0, 0];
     currentRound = 1;
     isBonusRound = false;
-    
-    document.getElementById('player-selection').classList.add('hidden');
+
+    for (let i = 1; i <= numPlayers; i++) {
+        const val = document.getElementById(`p${i}-name-input`).value.trim();
+        playerNames[i - 1] = val !== "" ? val.toUpperCase() : `PLAYER ${i}`;
+    }
+
+    document.getElementById('name-entry').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    
-    for(let i = 1; i <= 3; i++) {
+
+    for (let i = 1; i <= 3; i++) {
         const display = document.getElementById(`p${i}-display`);
         display.classList.toggle('hidden', i > numPlayers);
     }
-    
+
     startRoundSequence();
 }
 
@@ -153,8 +204,8 @@ function showLeaderboard() {
     for(let i = 0; i < numPlayers; i++) {
         const scoreDiv = document.createElement('div');
         scoreDiv.className = `player-score p${i+1}-color`;
-        scoreDiv.innerHTML = `PLAYER ${i+1}: $${playerTotalBanks[i].toLocaleString()}`;
-        
+        scoreDiv.innerHTML = `${playerNames[i]}: $${playerTotalBanks[i].toLocaleString()}`;
+
         if (playerTotalBanks[i] === maxScore && maxScore > 0) {
             scoreDiv.classList.add('leader-halo');
         }
@@ -183,7 +234,7 @@ function handleBonusRoundEntry() {
     picker.style = "position:fixed; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:10000; color:white; font-family:Arial Black;";
     
     const h2 = document.createElement('h2');
-    h2.innerText = `PLAYER ${currentPlayer + 1}: CHOOSE A CATEGORY`;
+    h2.innerText = `${playerNames[currentPlayer]}: CHOOSE A CATEGORY`;
     picker.appendChild(h2);
 
     const btnCont = document.createElement('div');
@@ -281,9 +332,27 @@ async function revealBonusPicks() {
     }
 
     await new Promise(r => setTimeout(r, 4000));
+    
     const revealSnd = document.getElementById('snd-reveal');
+    const originalSrc = revealSnd.src;
+
+    // Generate a random number (1-10) to look for a file in your subfolder
+    // You can increase '10' to a higher number as you add more files
+    const randomNum = Math.floor(Math.random() * 5) + 1;
+    const randomPath = `sounds/good_luck/${randomNum}.wav`;
+
+    // Attempt to swap the source and play
+    revealSnd.src = randomPath;
     revealSnd.currentTime = 0;
-    await revealSnd.play().catch(() => {});
+
+    try {
+        await revealSnd.play();
+    } catch (err) {
+        // If the random file doesn't exist or fails, revert to the original sound and play that
+        revealSnd.src = originalSrc;
+        revealSnd.currentTime = 0;
+        await revealSnd.play().catch(() => {});
+    }
     
     startSolveAttempt();
 }
@@ -390,15 +459,15 @@ function createKeyboard() {
 }
 
 function updateUI() {
-    for(let i = 0; i < numPlayers; i++) {
+    for (let i = 0; i < numPlayers; i++) {
         const displayAmount = isBonusRound ? playerTotalBanks[i] : playerRoundBanks[i];
+        const bankElement = document.getElementById(`p${i + 1}-bank`);
         
-        const bankElement = document.getElementById(`p${i+1}-bank`);
-        if (bankElement) {
-            bankElement.innerText = displayAmount.toLocaleString();
-        }
-        
-        document.getElementById(`p${i+1}-display`).classList.remove('active-turn');
+        // Update the Name portion of the display as well
+        const displayDiv = document.getElementById(`p${i + 1}-display`);
+        displayDiv.innerHTML = `${playerNames[i]}: $<span id="p${i + 1}-bank">${displayAmount.toLocaleString()}</span>`;
+
+        document.getElementById(`p${i + 1}-display`).classList.remove('active-turn');
     }
     
     document.getElementById(`p${currentPlayer+1}-display`).classList.add('active-turn');
@@ -575,7 +644,7 @@ function checkSolve() {
             alert(`YOU SOLVED IT! YOU WIN $${prize.toLocaleString()}!`);
         } else {
             playerTotalBanks[currentPlayer] += playerRoundBanks[currentPlayer];
-            alert(`PLAYER ${currentPlayer + 1} SOLVED IT!`);
+            alert(`${playerNames[currentPlayer]} SOLVED IT!`);
         }
         togglePhase('win');
     } else {

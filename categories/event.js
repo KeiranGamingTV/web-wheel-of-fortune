@@ -1802,7 +1802,6 @@ const eventData = {
         "HUMID AFTERNOON",
         "HUMID WEATHER",
         "HUNDRED YEARS WAR",
-        "HUNDRED YEARSÂ€˜ WAR",
         "HUNDRED YEARS' WAR",
         "HUNGRY GHOST FESTIVAL",
         "HUNTING AND FISHING",
