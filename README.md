@@ -98,7 +98,7 @@ Because this project is built with standard front-end technologies, no complex s
   1. Clone or download this repository to your local machine.
   2. Open the project folder and launch `index.html` in your preferred browser.
 #### To run online (Convenient Method):
-  1. Visit [the official website](https://keirangamingtv.github.io/web-wheel-of-fortune/), or access it from [my main page](https://keirangamingtv.github.io/).
+  1. Visit [my official website](https://keirangamingtv.github.io/web-wheel-of-fortune/), or access it from [my main page](https://keirangamingtv.github.io/).
 ### Gameplay Mechanics
 - Spin the Wheel: Click to spin. If you land on a cash value, guess a consonant using the on-screen keyboard. Correct guesses multiply the wedge value by the number of letter occurrences and add the total to your bank.
 - Buy a Vowel: If you have at least $250 in your bank, you can purchase a vowel (A, E, I, O, U).
@@ -106,18 +106,31 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
-## - 🔨 **Version 1.2_05.08.2026**
+## - 🔨 **Version 1.3.4**
+  - Version naming scheme has been changed...again.
+    - For all previous versions, I have added the new naming scheme after the old version names.
+  - This is another bug release.
+    - Changed wheel spinning code so the wheel takes slightly longer to slow down and completely stop.
+    - Fixed SFX issues.
+      - The final round's solve attempt now properly starts after the "good luck" sound effect finishes.
+      - Changed method of randomly choosing the "good luck" sound effect to be more reliable.
+      - Increased length of solve music.
+      - Normalized volume for all SFX.
+  - Removed puzzles:
+    - Title / Author: "THE CHRONICLES OF NARDIA BY C. S. LEWIS"
+
+## - 🔨 **Version 1.2_05.08.2026 // 1.3.3**
   - Another bug fix release.
     - Fixed the $10,000 wedge.
     - Fixed issue where if the puzzle was completely filled in, the round would not end.
       - This has been fixed.
 
-## - 🔨 **Version 1.1_05.08.2026**
+## - 🔨 **Version 1.1_05.08.2026 // 1.3.2**
   - Bug fix release.
     - Fixed "Fictional Character" category.
       - I realized that I accidentally copied over all of the puzzles from the "Event" category over to the "Fictional Character" category. This has been fixed and the correct puzzles have been put in.
       
-## - **Version 1.0_05.08.2026**
+## - **Version 1.0_05.08.2026 // 1.3.1**
   - Added the $10,000 wedge with the proper BANKRUPT wedges.
     - This leads to the wheel technically having 72 wedges in the code instead of 24 wedges.
   - Added new sound effects:
@@ -135,7 +148,7 @@ Because this project is built with standard front-end technologies, no complex s
       - Food and Drink: "COOKIES Â€˜N' CREAM CUPCAKES" is now "COOKIES 'N' CREAM CUPCAKES"
       - Song Title: "ROCK Â€˜N' ROLL HIGH SCHOOL" is now "ROCK 'N' ROLL HIGH SCHOOL" 
 
-## - **Version 1.0_05.06.2026**
+## - **Version 1.0_05.06.2026 // 1.3**
   - Another major release for the project! 😄
   - Removed two puzzles due to board overflow errors. _Might be added back later._
     - Song Title: "PUT A LITTLE LOVE IN YOUR HEART"
@@ -148,11 +161,11 @@ Because this project is built with standard front-end technologies, no complex s
     - Fixed UI and code bugs that came with all of this.
   - More to come, including new UI effects, sound effects, animations! 
 
-## - 🔨 **Version 1.0_04.28.2026_3**
+## - 🔨 **Version 1.2_04.28.2026 // 1.2.2**
   - Bug fix build
     - Website overall was being iffy, so replaced all uploaded code with my local code that I know works.
 
-## - **Version 1.0_04.28.2026_2**
+## - **Version 1.1_04.28.2026 // 1.2.1**
   - Added sound effects and music.
   - Added animation to logo.
   - Added visual effects for "BANKRUPT" and "LOSE A TURN".
@@ -160,7 +173,7 @@ Because this project is built with standard front-end technologies, no complex s
   - Fixed "NO MORE VOWELS" alert bug.
     - Alert would pop up every time a letter was called after all vowels had been found. This has been fixed so it only happens the first time instead of every time.
 
-## - **Version 1.0_04.28.2026**
+## - **Version 1.0_04.28.2026 // 1.2**
   - Major release and milestone for the project! 😁
   - Added the rest of the categories:
     - Event
@@ -185,7 +198,7 @@ Because this project is built with standard front-end technologies, no complex s
     - Title
     - What Are You Doing?
 
-## - **Version 1.0_04.27.2026**
+## - **Version 1.0_04.27.2026 // 1.1.2**
   - Changed keyboard layout to look like QWERTY keyboard.
   - Added `sounds` folder. Sound effects coming soon.
   - Fixed wheel transition bug.
@@ -195,21 +208,21 @@ Because this project is built with standard front-end technologies, no complex s
   - Fixed word overflow bug for puzzle board.
     - A lot of the longer puzzles were getting cut off at the bottom. This has been fixed.
 
-## - **Version 1.0_04.24.2026v2**
+## - **Version 1.1_04.24.2026 // 1.1.1**
   - Added Star And Role category.
 
-## - **Version 1.0_04.24.2026**
+## - **Version 1.0_04.24.2026 // 1.1**
   - Changed solve mechanics:
     - Old method used your physical keyboard and a text field. It looke sloppy and didn't match the rest of the typing mechanics.
     - New method uses the same keyboard you use for the rest of the game.
 
-## - **Version 1.0_04.23.2026**
+## - **Version 1.0_04.23.2026 // 1.0.1**
   - Added three categories:
     - Same Letter
     - Song / Artist
     - TV Show Title
 
-## - **Version 1.0_04.22.2026**
+## - **Version 1.0_04.22.2026 // 1.0**
   - Initial release.
 <br/>
 

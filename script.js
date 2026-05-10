@@ -333,23 +333,30 @@ async function revealBonusPicks() {
         }
     }
 
-    await new Promise(r => setTimeout(r, 4000));
+    await new Promise(r => setTimeout(r, 3000));
     
     const revealSnd = document.getElementById('snd-reveal');
     const originalSrc = revealSnd.src;
 
-    const randomNum = Math.floor(Math.random() * 5) + 1;
-    const randomPath = `sounds/good_luck/${randomNum}.wav`;
+    const goodLuckSounds = ["1.wav", "2.wav"];
+    const randomFile = goodLuckSounds[Math.floor(Math.random() * goodLuckSounds.length)];
+    const randomPath = `sounds/good_luck/${randomFile}`;
 
     revealSnd.src = randomPath;
     revealSnd.currentTime = 0;
 
     try {
         await revealSnd.play();
+        await new Promise(resolve => {
+            revealSnd.onended = resolve;
+        });
     } catch (err) {
         revealSnd.src = originalSrc;
         revealSnd.currentTime = 0;
         await revealSnd.play().catch(() => {});
+        await new Promise(resolve => {
+            revealSnd.onended = resolve;
+        });
     }
     
     startSolveAttempt();
@@ -528,7 +535,10 @@ async function handleGuess(letter) {
     } else {
         const wrongSnd = document.getElementById('snd-wrong');
         wrongSnd.currentTime = 0; wrongSnd.play().catch(() => {});
-        alert(`NO ${letter}!`);
+        setTimeout(() => {
+            alert(`NO ${letter}!`);
+        }, 50);
+        
         currentPlayer = (currentPlayer + 1) % numPlayers;
     }
     isVowelMode = false;
@@ -555,8 +565,8 @@ document.getElementById('spin-trigger').addEventListener('click', () => {
     isVowelMode = false;
     spinValueText.innerText = ""; 
     togglePhase('wheel');
-    const spinDuration = Math.floor(Math.random() * 2000) + 5000;
-    const constantSpeed = 12;
+    const spinDuration = Math.floor(Math.random() * 2000) + 6000;
+    const constantSpeed = 16;
     let startTime = null;
     let lastClickRotation = currentWheelRotation; 
     const clickSnd = document.getElementById('snd-click');
@@ -566,7 +576,7 @@ document.getElementById('spin-trigger').addEventListener('click', () => {
         const elapsed = timestamp - startTime;
         if (elapsed < spinDuration) {
             const remaining = 1 - (elapsed / spinDuration);
-            currentWheelRotation += constantSpeed * Math.pow(remaining, 2);
+            currentWheelRotation += constantSpeed * Math.pow(remaining, 3);
             wheelImg.style.transform = `rotate(${currentWheelRotation}deg)`;
             const currentStep = Math.floor((currentWheelRotation + 7.5) / 15);
             const lastStep = Math.floor((lastClickRotation + 7.5) / 15);
