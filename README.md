@@ -106,6 +106,14 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - **Version 1.3.5**
+  - Added animation for leaderboard.
+  - Fixed bug by adding 5ms delay between incorrect buzzer and "No Letter" alert.
+  - Removed the "BANKRUPT" and "LOSE A TURN" from the $ popup on the wheel. _The wedges are still there._
+  - Edited code:
+    - Added comments in `index.html`, `style.css`, and `script.js` to show what some functions or lines of code actually do.
+    - Reorganized `style.css`.
+
 ## - 🔨 **Version 1.3.4**
   - Version naming scheme has been changed...again.
     - For all previous versions, I have added the new naming scheme after the old version names.

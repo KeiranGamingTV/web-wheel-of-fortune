@@ -1,124 +1,118 @@
+/* =========================================
+   VARIABLES & BASE STYLES
+   ========================================= */
 :root {
-    --studio-bg: #050a1b;
-    --board-green: #00702b;
-    --neon-blue: #00e5ff;
-    --dark-blue: #1d00d7;
-    --gold-gradient: linear-gradient(to bottom, #d4af37, #fcf6ba, #b8860b);
-    --blue-gradient: linear-gradient(to bottom, #3741d4, #bbbafc, #0b2eb8);
+    /* Defines global color variables used throughout the game */
+    --studio-bg: #050a1b; /* Main background color */
+    --board-green: #00702b; /* Color of the unrevealed puzzle tiles */
+    --neon-blue: #00e5ff; /* Accent glow color */
+    --dark-blue: #1d00d7; /* Color when tiles are revealing */
+    --gold-gradient: linear-gradient(to bottom, #d4af37, #fcf6ba, #b8860b); /* Gold styling for buttons/frames */
+    --blue-gradient: linear-gradient(to bottom, #3741d4, #bbbafc, #0b2eb8); /* Blue styling for category pill */
 }
 
 body {
-    background-color: var(--studio-bg);
-    color: white;
-    font-family: 'Arial Black', sans-serif;
-    margin: 0;
-    display: flex;
+    background-color: var(--studio-bg); /* Applies the studio background color */
+    color: white; /* Sets default text color to white */
+    font-family: 'Arial Black', sans-serif; /* Sets default font */
+    margin: 0; /* Removes default body margins */
+    display: flex; /* Centers content horizontally and vertically */
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    padding-top: 20px;
+    height: 100vh; /* Takes up the full viewport height */
+    overflow: hidden; /* Prevents scrollbars */
+    padding-top: 20px; /* Pushes content slightly down */
 }
 
 #game-container {
-    width: 100%;
-    max-width: 1400px;
+    width: 100%; /* Takes full width available */
+    max-width: 1400px; /* Caps the maximum width */
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+    flex-direction: column; /* Stacks children vertically */
+    align-items: center; /* Centers children horizontally */
+    position: relative; /* Allows absolute positioning of children inside */
 }
 
-.bonus-category-btn {
-    padding: 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    background: goldenrod;
-    color: black;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Arial Black', sans-serif;
-    transition: transform 0.2s, background 0.2s;
-}
-
-.bonus-category-btn:hover {
-    background: #f1c40f;
-    transform: scale(1.05);
-}
-
-/* Round Banner Animation */
+/* =========================================
+   TYPOGRAPHY & BANNERS
+   ========================================= */
 #round-banner {
-    position: fixed;
-    top: 50%;
-    left: -100%;
-    transform: translateY(-50%);
-    font-size: 5rem;
+    position: fixed; /* Fixes banner to the viewport */
+    top: 50%; /* Centers vertically */
+    left: -100%; /* Starts off-screen to the left */
+    transform: translateY(-50%); /* Adjusts for exact vertical center */
+    font-size: 5rem; /* Huge text size */
     color: #fff;
-    text-shadow: 0 0 20px var(--neon-blue), 4px 4px #000;
-    white-space: nowrap;
-    z-index: 5000;
-    pointer-events: none;
+    text-shadow: 0 0 20px var(--neon-blue), 4px 4px #000; /* Adds neon glow and drop shadow */
+    white-space: nowrap; /* Prevents text from wrapping */
+    z-index: 5000; /* Puts it on top of almost everything */
+    pointer-events: none; /* Allows clicking through the banner */
 }
 
 .banner-enter { 
+    /* Animation class to slide the banner to the center */
     left: 50% !important; 
     transform: translate(-50%, -50%) !important; 
-    transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy entrance */
 }
 
 .banner-exit { 
+    /* Animation class to slide the banner off-screen to the right */
     left: 150% !important; 
     transform: translate(-50%, -50%) !important; 
-    transition: left 0.5s ease-in;
+    transition: left 0.5s ease-in; /* Smooth exit */
 }
 
-/* Leaderboard Pulse */
-@keyframes lead-pulse {
-    0% { box-shadow: 0 0 5px #fff; }
-    50% { box-shadow: 0 0 25px var(--neon-blue), 0 0 10px #fff; }
-    100% { box-shadow: 0 0 5px #fff; }
-}
-
-.leader-halo {
-    animation: lead-pulse 1.5s infinite;
-    border: 2px solid #fff !important;
-}
-
-#leaderboard-view {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--studio-bg);
+#category-pill {
+    background: var(--blue-gradient); /* Applies blue gradient */
+    padding: 5px 40px; /* Top/bottom and left/right padding */
+    border-radius: 50px; /* Makes edges fully rounded */
+    margin: 10px 0; /* Spacing above and below */
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 4000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Drop shadow */
+    border: 2px solid #fff; /* White border */
+    min-width: 300px; /* Ensures a minimum size */
 }
 
-/* Puzzle Board */
+#category-text {
+    color: #ffffff;
+    margin: 0; /* Removes default heading margins */
+    font-size: 2rem;
+    text-transform: uppercase; /* Forces text to uppercase */
+    letter-spacing: 2px; /* Spaces out letters */
+    text-align: center;
+    -webkit-text-stroke: 2px black; /* Adds a black outline to the text */
+}
+
+/* =========================================
+   GAME BOARD & TILES
+   ========================================= */
 #board-outer-frame {
-    background: var(--gold-gradient);
+    background: var(--gold-gradient); /* Gold casing for the board */
     padding: 12px;
-    border-radius: 35px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    border-radius: 35px; /* Rounds the outer frame corners */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7); /* Deep drop shadow */
 }
 
 #board-neon-glow {
-    background: #000;
+    background: #000; /* Black background behind tiles */
     padding: 8px;
-    border-radius: 25px;
-    border: 4px solid var(--neon-blue);
-    box-shadow: inset 0 0 15px var(--neon-blue), 0 0 15px var(--neon-blue);
+    border-radius: 25px; /* Inner rounded corners */
+    border: 4px solid var(--neon-blue); /* Neon border */
+    box-shadow: inset 0 0 15px var(--neon-blue), 0 0 15px var(--neon-blue); /* Inner and outer neon glow */
 }
 
 #puzzle-board {
-    display: grid;
-    grid-template-columns: repeat(13, 52px); 
-    grid-template-rows: repeat(4, 62px);
-    gap: 5px;
+    display: grid; /* Uses CSS grid for tile layout */
+    grid-template-columns: repeat(13, 52px); /* 13 columns, each 52px wide */
+    grid-template-rows: repeat(4, 62px); /* 4 rows, each 62px tall */
+    gap: 5px; /* Spacing between tiles */
 }
 
 @keyframes solve-flash {
+    /* Keyframes for the flashing animation when solving */
     0% { background-color: #fff; }
     50% { background-color: var(--dark-blue); }
     100% { background-color: #fff; }
@@ -127,316 +121,51 @@ body {
 .tile {
     width: 52px; 
     height: 62px;
-    background-color: var(--board-green);
-    border: 1px solid #111;
+    background-color: var(--board-green); /* Default green tile */
+    border: 1px solid #111; /* Slight dark border */
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 34px;
-    color: #000;
-    border-radius: 3px;
+    color: #000; /* Black text */
+    border-radius: 3px; /* Slightly rounded tile corners */
 }
 
-.tile.active { background-color: #fff; }
-.tile.hidden-letter { color: transparent; }
-.tile.dead { visibility: hidden; }
+.tile.active { background-color: #fff; } /* White background when tile is active/has a letter */
+.tile.hidden-letter { color: transparent; } /* Hides the text for unrevealed letters */
+.tile.dead { visibility: hidden; } /* Completely hides tiles in the dead corners of the board */
 .tile.solving-active {
-    animation: solve-flash 0.8s infinite;
-    color: #000 !important;
+    animation: solve-flash 0.8s infinite; /* Triggers the flashing animation */
+    color: #000 !important; /* Forces text to be visible */
 }
 
 .tile.revealing {
-    background-color: var(--dark-blue) !important;
-    transition: background-color 0.2s;
+    background-color: var(--dark-blue) !important; /* Turns blue briefly when revealed */
+    transition: background-color 0.2s; /* Smooth transition */
 }
 
-#category-pill {
-    background: var(--blue-gradient);
-    padding: 5px 40px;
-    border-radius: 50px;
-    margin: 10px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    border: 2px solid #fff;
-    min-width: 300px;
-}
-
-#category-text {
-    color: #ffffff;
-    margin: 0;
-    font-size: 2rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-align: center;
-    -webkit-text-stroke: 2px black;
-}
-
-#interaction-area {
-    margin-top: 30px;
-    width: 100%;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-
-#action-menu { display: flex; gap: 15px; width: 80%; height: fit-content; }
-
-#action-menu button {
-    flex: 1;
-    padding: 18px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    border: none;
-}
-
-#spin-trigger { background: #f1c40f; text-shadow: 2px 2px #ffffff;}
-#buy-vowel-btn { background: #3498db; color: white; text-shadow: 2px 2px #000;}
-#solve-trigger { background: #2ecc71; color: white; text-shadow: 2px 2px #000;}
-#play-again-btn, #next-round-btn { background: #9b59b6; color: white; text-shadow: 2px 2px #000;}
-
-.bonus-round-trigger-btn {
-    background: #e67e22;
-    color: white;
-    padding: 18px;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    cursor: pointer;
-    border: none;
-    font-weight: bold;
-    text-shadow: 2px 2px #000;
-    flex: 1;
-}
-
-.bonus-round-trigger-btn:hover {
-    background: #d35400;
-}
-
-#wheel-container {
-    position: absolute;
-    left: 50%;
-    bottom: -450px;
-    transform: translateX(-50%);
-    transition: bottom 0.6s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#wheel-container.visible { bottom: -220px; }
-
-#fortune-wheel {
-    width: 450px;
-    height: 450px;
-    border-radius: 50%;
-    border: 6px solid #fff;
-}
-
-#wheel-pointer {
-    font-size: 50px;
-    color: red;
-    z-index: 20;
-    margin-bottom: -35px;
-}
-
-#spin-result-overlay {
-    position: absolute;
-    top: 50px;
-    background: rgba(0,0,0,0.85);
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 2px solid #ffd700;
-}
-
-#spin-value-text { font-size: 2rem; color: #ffd700; font-weight: bold; }
-
-#keyboard {
-    display: grid;
-    grid-template-columns: repeat(20, 1fr);
-    gap: 10px;
-    width: 785px;
-    margin: 20px auto;
-}
-
-.key {
-    grid-column: span 2;
-    padding: 15px 0;
-    font-size: 1.4rem;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    background: #eee;
-    box-shadow: 0 4px 0 #ccc;
-}
-
-.key-spacer { visibility: hidden; pointer-events: none; }
-.key:active { transform: translateY(2px); box-shadow: 0 2px 0 #ccc; }
-.key:disabled { opacity: 0.2; cursor: not-allowed; box-shadow: none; }
-
-#solve-overlay {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    pointer-events: none;
-}
-
-#timer-text {
-    font-size: 2.5rem;
-    color: #ff4757;
-    margin: 0;
-    text-shadow: 0 0 15px rgba(255, 71, 87, 0.6), 2px 2px 5px #000;
-}
-
-.hidden { display: none !important; }
-
-.p1-color { color: #3498db; }
-.p2-color { color: #ff4757; }
-.p3-color { color: #f1c40f; }
-
+/* =========================================
+   MENUS & LEADERBOARD
+   ========================================= */
 #main-menu, #player-selection {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 30px; /* Spacing between logo and buttons */
 }
 
 #game-logo {
     width: 600px;
-    max-width: 90vw;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255));
-    animation: float 4s ease-in-out infinite;
+    max-width: 90vw; /* Responsive maximum width */
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255)); /* White glow */
+    animation: float 4s ease-in-out infinite; /* Hovering animation */
 }
 
 @keyframes float {
+    /* Keyframes for logo floating */
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-#start-btn, #submit-solve, .player-buttons button {
-    padding: 20px 40px;
-    font-size: 1.8rem;
-    font-weight: bold;
-    border-radius: 15px;
-    border: none;
-    cursor: pointer;
-    background: var(--gold-gradient);
-    color: #000;
-}
-
-.player-buttons { display: flex; gap: 20px; }
-
-#status-bar {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.player-score {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-shadow: 2px 2px #000;
-    padding: 10px;
-    border-radius: 10px;
-    transition: background 0.3s;
-    border: 2px solid transparent;
-}
-
-.player-score.active-turn {
-    background: rgba(255, 255, 255, 0.1);
-    outline: 2px solid #fff;
-}
-
-#buy-vowel-btn:disabled {
-    background: #444 !important;
-    color: #777 !important;
-    cursor: not-allowed;
-}
-
-#edge-hover-zone {
-    position: fixed;
-    left: 0; top: 50%;
-    transform: translateY(-50%);
-    width: 40px; height: 150px; 
-    z-index: 1000;
-    display: flex; align-items: center; justify-content: flex-start;
-}
-
-#edge-panel-btn {
-    width: 6px; height: 100px;
-    background: rgba(255, 255, 255, 0.4);
-    border: none; border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s;
-    padding: 0;
-}
-
-#edge-hover-zone:hover #edge-panel-btn {
-    transform: translateX(0);
-    background: rgba(255, 255, 255, 0.8);
-}
-
-#edge-panel-btn:hover { background: #fff; width: 10px; }
-
-.hidden-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    z-index: 2000;
-    justify-content: center; align-items: center;
-}
-
-#credits-content {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 40px; border-radius: 40px;
-    text-align: center; color: white;
-    max-width: 600px; text-shadow: 2px 2px #000;
-    max-height: 70vh; overflow-y: auto; scrollbar-width: none;
-}
-
-#credits-content strong { font-weight: bold; color: rgb(40, 255, 30); }
-
-#close-credits {
-    margin-top: 20px; padding: 12px 25px;
-    font-family: 'Arial Black', sans-serif;
-    font-size: 0.9rem; letter-spacing: 1px;
-    cursor: pointer; border-radius: 50px; color: white;
-    background: rgba(255, 255, 255, 0); 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    text-transform: uppercase;
-}
-
-.special-effect-img {
-    position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    z-index: 3000; width: 600px; pointer-events: none;
-}
-
-.zoom-effect { animation: zoom-sequence 3.6s ease-in-out forwards; }
-
-@keyframes zoom-sequence {
-    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    8% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-    12% { transform: translate(-50%, -50%) scale(1); }
-    88% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    92% { transform: translate(-50%, -50%) scale(1.2); }
-    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    50% { transform: translateY(-20px); } /* Moves up */
 }
 
 #name-entry {
@@ -467,12 +196,143 @@ body {
     font-family: 'Arial Black', sans-serif;
     border-radius: 5px;
     border: 2px solid var(--neon-blue);
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.5); /* Semi-transparent black */
     color: white;
     width: 250px;
 }
 
+#leaderboard-view {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--studio-bg); /* Covers the whole screen */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 4000; /* High z-index to appear over game */
+}
+
+@keyframes lead-rubber-enter {
+    /* Entrance animation for leaderboard cards */
+    0% { transform: translateY(100vh); opacity: 0; }
+    60% { transform: translateY(-20px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes lead-slide-exit {
+    /* Exit animation for leaderboard cards */
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.leader-card-enter {
+    animation: lead-rubber-enter 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    opacity: 0; 
+}
+
+.leader-card-exit {
+    animation: lead-slide-exit 0.5s ease-in forwards;
+}
+
+#leaderboard-scores .player-score {
+    border: 2px solid #fff !important; /* Forces a white border on leaderboard cards */
+}
+
+/* =========================================
+   UI CONTROLS & STATUS BAR
+   ========================================= */
+#interaction-area {
+    margin-top: 30px; /* Space below the category pill */
+    width: 100%;
+    height: 300px; /* Fixed height for interaction space */
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#action-menu { 
+    display: flex; 
+    gap: 15px; 
+    width: 80%; 
+    height: fit-content; 
+    transition: transform 0.2s ease-in-out;
+}
+
+.slide-out-bottom {
+    transform: translateY(100vh); /* Animation class to push menu off screen */
+}
+
+#start-btn, #submit-solve, .player-buttons button {
+    /* Base styles for large menu buttons */
+    padding: 20px 40px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: var(--gold-gradient);
+    color: #000;
+}
+
+.player-buttons { display: flex; gap: 20px; }
+
+#action-menu button {
+    /* Base styles for action buttons under the board */
+    flex: 1; /* Makes them stretch equally */
+    padding: 18px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+/* Individual button colorings */
+#spin-trigger { background: #f1c40f; text-shadow: 2px 2px #ffffff;}
+#buy-vowel-btn { background: #3498db; color: white; text-shadow: 2px 2px #000;}
+#solve-trigger { background: #2ecc71; color: white; text-shadow: 2px 2px #000;}
+#play-again-btn, #next-round-btn { background: #9b59b6; color: white; text-shadow: 2px 2px #000;}
+
+#buy-vowel-btn:disabled {
+    background: #444 !important;
+    color: #777 !important;
+    cursor: not-allowed;
+}
+
+.bonus-category-btn {
+    padding: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: goldenrod;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Arial Black', sans-serif;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.bonus-category-btn:hover {
+    background: #f1c40f; /* Brightens on hover */
+    transform: scale(1.05); /* Slightly enlarges on hover */
+}
+
+.bonus-round-trigger-btn {
+    background: #e67e22;
+    color: white;
+    padding: 18px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+    flex: 1;
+}
+
+.bonus-round-trigger-btn:hover { background: #d35400; }
+
 #final-play-btn {
+    /* Submit button for name entry screen */
     padding: 15px 50px;
     font-size: 1.8rem;
     font-weight: bold;
@@ -482,4 +342,199 @@ body {
     background: var(--gold-gradient);
     color: #000;
     margin-top: 20px;
+}
+
+#status-bar {
+    display: flex;
+    justify-content: space-around; /* Spreads player scores out evenly */
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.player-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px #000; /* Black text outline */
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.3s;
+    border: 2px solid transparent;
+}
+
+.player-score.active-turn {
+    background: rgba(255, 255, 255, 0.1); /* Highlights the active player */
+    outline: 2px solid #fff;
+}
+
+/* Player color variables */
+.p1-color { color: #3498db; }
+.p2-color { color: #ff4757; }
+.p3-color { color: #f1c40f; }
+
+/* =========================================
+   WHEEL COMPONENT
+   ========================================= */
+#wheel-container {
+    position: absolute;
+    left: 50%;
+    bottom: -450px; /* Starts hidden off the bottom of the screen */
+    transform: translateX(-50%); /* Centers it horizontally */
+    transition: bottom 0.6s ease-in-out; /* Smooth pop-up animation */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#wheel-container.visible { bottom: -220px; } /* Slides the wheel up into view */
+
+#fortune-wheel {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%; /* Makes it a circle */
+    border: 6px solid #fff; /* White rim */
+}
+
+#wheel-pointer {
+    font-size: 50px;
+    color: red; /* Red arrow at the top of the wheel */
+    z-index: 20;
+    margin-bottom: -35px; /* Overlaps it onto the wheel slightly */
+}
+
+#spin-result-overlay {
+    position: absolute;
+    top: 50px; /* Positioned over the wheel */
+    background: rgba(0,0,0,0.85); /* Dark background */
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid #ffd700; /* Gold border */
+}
+
+#spin-value-text { font-size: 2rem; color: #ffd700; font-weight: bold; } /* Text showing landed value */
+
+/* =========================================
+   KEYBOARD COMPONENT
+   ========================================= */
+#keyboard {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr); /* 20 equal fractions for layout */
+    gap: 10px;
+    width: 785px;
+    margin: 20px auto; /* Centers the keyboard */
+}
+
+.key {
+    grid-column: span 2; /* Each key takes up 2 fractions */
+    padding: 15px 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #eee;
+    box-shadow: 0 4px 0 #ccc; /* Creates a 3D button effect */
+}
+
+.key-spacer { visibility: hidden; pointer-events: none; } /* Invisible spacers for keyboard rows */
+.key:active { transform: translateY(2px); box-shadow: 0 2px 0 #ccc; } /* Depresses button on click */
+.key:disabled { opacity: 0.2; cursor: not-allowed; box-shadow: none; } /* Fades out used/disabled keys */
+
+/* =========================================
+   OVERLAYS, MODALS & EFFECTS
+   ========================================= */
+.hidden { display: none !important; } /* Global utility to hide elements */
+
+#solve-overlay {
+    position: absolute;
+    top: -40px; /* Positioned above the keyboard */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    pointer-events: none; /* Can't be clicked */
+}
+
+#timer-text {
+    font-size: 2.5rem;
+    color: #ff4757; /* Red timer */
+    margin: 0;
+    text-shadow: 0 0 15px rgba(255, 71, 87, 0.6), 2px 2px 5px #000; /* Neon red glow */
+}
+
+#edge-hover-zone {
+    position: fixed;
+    left: 0; top: 50%; /* Middle left of the screen */
+    transform: translateY(-50%);
+    width: 40px; height: 150px; 
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: flex-start;
+}
+
+#edge-panel-btn {
+    width: 6px; height: 100px; /* Thin sliver sticking out */
+    background: rgba(255, 255, 255, 0.4);
+    border: none; border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transform: translateX(-100%); /* Hidden by default */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s;
+    padding: 0;
+}
+
+#edge-hover-zone:hover #edge-panel-btn {
+    transform: translateX(0); /* Slides out when hovered */
+    background: rgba(255, 255, 255, 0.8);
+}
+
+#edge-panel-btn:hover { background: #fff; width: 10px; } /* Expands slightly when hovering directly over button */
+
+.hidden-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    backdrop-filter: blur(5px); /* Blurs the background behind it */
+    z-index: 2000;
+    justify-content: center; align-items: center;
+}
+
+#credits-content {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 40px; border-radius: 40px;
+    text-align: center; color: white;
+    max-width: 600px; text-shadow: 2px 2px #000;
+    max-height: 70vh; overflow-y: auto; scrollbar-width: none; /* Allows scrolling inside if needed */
+}
+
+#credits-content strong { font-weight: bold; color: rgb(40, 255, 30); } /* Highlights strong text green */
+
+#close-credits {
+    margin-top: 20px; padding: 12px 25px;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 0.9rem; letter-spacing: 1px;
+    cursor: pointer; border-radius: 50px; color: white;
+    background: rgba(255, 255, 255, 0); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+}
+
+.special-effect-img {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Starts scaled to 0 (invisible) */
+    z-index: 3000; width: 600px; pointer-events: none;
+}
+
+.zoom-effect { animation: zoom-sequence 3.6s ease-in-out forwards; } /* Triggers pop-in animation */
+
+@keyframes zoom-sequence {
+    /* Keyframes for Bankrupt/Lose a Turn popping at the screen */
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    8% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; } /* Pops past full size */
+    12% { transform: translate(-50%, -50%) scale(1); } /* Settles at full size */
+    88% { transform: translate(-50%, -50%) scale(1); opacity: 1; } /* Holds size */
+    92% { transform: translate(-50%, -50%) scale(1.2); } /* Quick pop before shrinking */
+    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; } /* Shrinks back to nothing */
 }
