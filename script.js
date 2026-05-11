@@ -53,7 +53,7 @@ const newWheelSegments = [
 // ------------------------------------
 // Global Game State Variables
 // ------------------------------------
-let currentRound = 1; // Tracks current round (1 to 3, then bonus)
+let currentRound = 1; // Tracks current round (1 to 4, then bonus)
 let numPlayers = 1; // Number of active players
 let currentPlayer = 0; // Index of the player currently taking a turn
 let playerRoundBanks = [0, 0, 0]; // Money earned by each player in the current round
@@ -63,11 +63,19 @@ let currentSpinValue = 0; // Value landed on after a wheel spin
 let isVowelMode = false; // Flag indicating if the user is currently buying a vowel
 let currentWheelRotation = 0; // Tracks the CSS rotation degrees of the wheel graphic
 let solveTimer = null; // Interval ID for the 20-second solve clock
+let consonantTimer = null; // Interval ID for the 3-second consonant clock
 let isSolving = false; // Flag indicating if a player is attempting to solve
 let solveTiles = []; // Array of DOM tile elements that need to be filled in during a solve
 let currentSolveIndex = 0; // Tracks which tile the player is currently typing into during a solve
 let hasAlertedNoVowels = false; // Prevents spamming the "no vowels left" alert
 let playerNames = ["PLAYER 1", "PLAYER 2", "PLAYER 3"]; // Defaults; overwritten by user input
+
+// Toss-Up IDs
+let isTossUp = false;
+let tossUpInterval = null;
+let tossUpRevealedIndices = [];
+let tossUpEligiblePlayers = [];
+let tossUpValue = 0;
 
 // Bonus Round Specific Variables
 let isBonusRound = false; 
@@ -137,47 +145,55 @@ function finalizeStart() {
 
 // Handles the transition animations and state resets between rounds
 async function startRoundSequence() {
-    playerRoundBanks = [0, 0, 0]; // Clears the temporary round scores
+    playerRoundBanks = [0, 0, 0];
     isVowelMode = false;
     hasAlertedNoVowels = false;
+    isTossUp = false;
 
-    // Changes starting player based on round number (Round 1: P1, Round 2: P2, etc.)
-    if (!isBonusRound) {
-        currentPlayer = (currentRound - 1) % numPlayers;
-    }
-
-    // Hides end-of-round buttons
-    document.getElementById('next-round-btn').classList.add('hidden');
-    document.getElementById('play-again-btn').classList.add('hidden');
-    const bonusBtn = document.getElementById('bonus-round-btn');
-    if (bonusBtn) bonusBtn.classList.add('hidden');
-    document.getElementById('game-screen').classList.add('hidden'); // Temporarily hide board
-    
-    // Grabs and resets the banner animation classes
     const banner = document.getElementById('round-banner');
     banner.classList.remove('banner-enter', 'banner-exit');
+
+    /* --------------------
+    ANY HELP WITH THIS CODE SEGMENT BELOW WOULD BE GREATLY APPRECIATED!
+    -------------------- */
+
+    // Determine Round Type and Title
+    let roundTitle = `ROUND ${currentRound}`;
+    if (currentRound === 1) roundTitle = "TOSS-UP $1,000";
+    if (currentRound === 2) roundTitle = "TOSS-UP $2,000";
+    if (currentRound === 3) roundTitle = "ROUND 1";
+    if (currentRound === 4) roundTitle = "ROUND 2";
+    if (currentRound === 5) roundTitle = "ROUND 3";
+    if (currentRound === 6) roundTitle = "TRIPLE TOSS-UP"; // 3, 4, 5 are internal TU counters for the Triple
+    if (currentRound === 7) roundTitle = "ROUND 4";
+    if (isBonusRound) roundTitle = "BONUS ROUND";
+    /* --------------------
+    -------------------- */
     
-    // Sets the text and background color of the banner depending on round type
-    banner.innerText = isBonusRound ? "BONUS ROUND" : `ROUND ${currentRound}`;
+    banner.innerText = roundTitle;
     banner.style.background = isBonusRound ? "black" : "transparent";
     
-    void banner.offsetWidth; // Forces a browser reflow to ensure animation restarts cleanly
-
-    // Triggers slide-in animation
+    document.getElementById('game-screen').classList.add('hidden');
+    void banner.offsetWidth;
     banner.classList.add('banner-enter');
-    await new Promise(r => setTimeout(r, 2000)); // Waits 2 seconds
-    
-    // Triggers slide-out animation
+    await new Promise(r => setTimeout(r, 2000));
     banner.classList.remove('banner-enter');
     banner.classList.add('banner-exit');
-    await new Promise(r => setTimeout(r, 600)); // Waits 0.6 seconds
+    await new Promise(r => setTimeout(r, 600));
 
-    document.getElementById('game-screen').classList.remove('hidden'); // Shows board again
-    
-    // Initializes the correct board logic
+    document.getElementById('game-screen').classList.remove('hidden');
+
     if (isBonusRound) {
         initBonusRound();
-    } else {
+    } else if (currentRound === 1 || currentRound === 2 || (currentRound >= 6 && currentRound <= 8)) {
+        isTossUp = true;
+        tossUpValue = (currentRound === 1) ? 1000 : 2000;
+        initTossUp();
+    } else if (isTossUp) {
+        document.getElementById('action-menu').classList.add('hidden'); // Ensure hidden at round start
+        initTossUp();
+    }   else {
+        // Actual Rounds 1, 2, 3 correspond to game currentRound 3, 4, 5
         init();
     }
 }
@@ -252,11 +268,12 @@ function showLeaderboard() {
     // After 5 seconds total, decides where to go next based on current round
     setTimeout(() => {
         view.classList.add('hidden');
-        if (currentRound < 3) {
+        // Sequence: TU1(1), TU2(2), R1(3), R2(4), R3(5), TripleTU(6,7,8), Bonus
+        if (currentRound < 8) {
             currentRound++;
-            startRoundSequence(); // Plays next normal round
+            startRoundSequence();
         } else {
-            handleBonusRoundEntry(); // Triggers bonus round logic if Round 3 just ended
+            handleBonusRoundEntry();
         }
     }, 5000);
 }
@@ -415,7 +432,7 @@ async function revealBonusPicks() {
         });
     }
     
-    startSolveAttempt(); // Immediately triggers the 10 second clock
+    startSolveAttempt(); // Immediately triggers the 20 second clock
 }
 
 // Reloads the entire page to start a fresh game
@@ -563,6 +580,11 @@ function updateUI() {
         buyBtn.disabled = (playerRoundBanks[currentPlayer] < 250 || isBonusRound); // Locks if broke or in bonus round
         buyBtn.style.opacity = isBonusRound ? "0.5" : "1";
     }
+
+    if (isSolving) {
+        document.getElementById('solve-overlay').classList.remove('hidden');
+        document.getElementById('keyboard-container').classList.remove('hidden');
+    }
 }
 
 // Scans the active tiles to see if any hidden letters are A, E, I, O, or U
@@ -574,6 +596,10 @@ function checkVowelsRemaining() {
 
 // Processes a user's letter guess during a standard turn
 async function handleGuess(letter) {
+    // Stop the 3-second consonant timer and hide the overlay as soon as a guess is made
+    clearInterval(consonantTimer);
+    document.getElementById('solve-overlay').classList.add('hidden');
+
     // If they are in the middle of typing a solve, route the input there instead
     if (isSolving) { handleSolveLetter(letter); return; }
 
@@ -650,8 +676,19 @@ function handleSolveLetter(letter) {
 
 // Applies a flashing CSS class to whichever tile the player needs to type into next
 function highlightCurrentSolveTile() {
-    solveTiles.forEach(t => t.classList.remove('solving-active'));
-    if (currentSolveIndex < solveTiles.length) solveTiles[currentSolveIndex].classList.add('solving-active');
+    // Remove existing highlight
+    document.querySelectorAll('.tile').forEach(t => t.classList.remove('solving-active'));
+    
+    if (isSolving && solveTiles[currentSolveIndex]) {
+        solveTiles[currentSolveIndex].classList.add('solving-active');
+        
+        // This prevents the flickering you see when a key is pressed
+        const solveOverlay = document.getElementById('solve-overlay');
+        const timerContainer = document.getElementById('timer-display');
+        
+        if (solveOverlay) solveOverlay.classList.remove('hidden');
+        if (timerContainer) timerContainer.classList.remove('hidden');
+    }
 }
 
 // Logic triggered when the user clicks "SPIN"
@@ -847,8 +884,36 @@ function prepareVowelPurchase() {
     } else alert("YOU NEED $250 TO BUY A VOWEL."); // Failsafe
 }
 
+// Manages the 3-second countdown for consonant selection
+function startConsonantTimer() {
+    clearInterval(consonantTimer);
+    let timeLeft = 3;
+    const timerDisplay = document.getElementById('timer-text');
+    const overlay = document.getElementById('solve-overlay');
+    
+    overlay.classList.remove('hidden');
+    timerDisplay.innerText = timeLeft;
+    
+    consonantTimer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(consonantTimer);
+            overlay.classList.add('hidden');
+            const wrongSnd = document.getElementById('snd-wrong');
+            wrongSnd.currentTime = 0; 
+            wrongSnd.play().catch(() => {});
+            currentPlayer = (currentPlayer + 1) % numPlayers;
+            togglePhase('menu');
+        }
+    }, 1000);
+}
+
 // Massive utility function that manages hiding/showing HTML elements based on what is happening in the game
 function togglePhase(phase, msg = "") {
+    // Always clear the consonant timer when the game phase changes
+    clearInterval(consonantTimer);
+
     // First, hide everything
     const screens = ['action-menu', 'wheel-container', 'keyboard-container', 'solve-overlay'];
     screens.forEach(s => {
@@ -887,7 +952,13 @@ function togglePhase(phase, msg = "") {
         });
     } else if (phase === 'keyboard') {
         document.getElementById('keyboard-container').classList.remove('hidden');
-        document.getElementById('instruction-text').innerText = msg; // Tells them to pick vowel or consonant
+        document.getElementById('instruction-text').innerText = msg;
+        
+        // Triggers the 3-second timer if we are in a normal round and not buying a vowel
+        if (!isVowelMode && !isBonusRound) {
+            startConsonantTimer();
+        }
+
         const vowels = "AEIOU";
         
         // Disables consonants if VowelMode is true, disables vowels if VowelMode is false
@@ -957,3 +1028,161 @@ function openCredits() { document.getElementById('credits-modal').style.display 
 function closeCredits() { document.getElementById('credits-modal').style.display = 'none'; }
 // Allows hitting ESC on keyboard to close the credits overlay
 window.addEventListener('keydown', (e) => { if (e.key === "Escape") closeCredits(); });
+
+function initTossUp() {
+    const data = allCategories[Math.floor(Math.random() * allCategories.length)];
+    document.getElementById('category-text').innerText = data.category;
+    currentPuzzle = data.puzzles[Math.floor(Math.random() * data.puzzles.length)].toUpperCase();
+    
+    createGrid();
+    layoutLetters();
+    createKeyboard(); 
+    
+    // UI Setup: Hide standard action buttons and show Toss-Up buzzers
+    document.getElementById('action-menu').classList.add('hidden'); // REMOVES ACTION BUTTONS
+    document.getElementById('keyboard-container').classList.add('hidden'); // Keep keyboard hidden until buzz
+    document.getElementById('toss-up-buttons').classList.remove('hidden');
+    
+    const btnContainer = document.getElementById('buzz-buttons-container');
+    btnContainer.innerHTML = "";
+    
+    tossUpEligiblePlayers = [];
+    for(let i = 0; i < numPlayers; i++) {
+        tossUpEligiblePlayers.push(i);
+        const btn = document.createElement('button');
+        btn.className = `buzz-btn buzz-p${i+1}`;
+        btn.innerText = playerNames[i];
+        btn.onclick = () => buzzIn(i);
+        btnContainer.appendChild(btn);
+    }
+
+    tossUpRevealedIndices = [];
+    document.getElementById('snd-toss-up').currentTime = 0;
+    document.getElementById('snd-toss-up').play();
+    
+    tossUpInterval = setInterval(revealTossUpLetter, 1000);
+}
+
+function buzzIn(playerIndex) {
+    clearInterval(tossUpInterval);
+    currentPlayer = playerIndex;
+    updateUI(); 
+    
+    // UI Swap: Hide buzzers and reveal keyboard/solve interface
+    document.getElementById('toss-up-buttons').classList.add('hidden');
+    document.getElementById('action-menu').classList.add('hidden');
+    
+    const kbContainer = document.getElementById('keyboard-container');
+    const solveOverlay = document.getElementById('solve-overlay');
+    const timerDisplay = document.getElementById('timer-text');
+
+    kbContainer.classList.remove('hidden');
+    solveOverlay.classList.remove('hidden');
+
+    isSolving = true;
+    currentSolveIndex = 0;
+    solveTiles = Array.from(document.querySelectorAll('.tile.active.hidden-letter'));
+    highlightCurrentSolveTile();
+    
+    // Initialize 10 second timer
+    clearInterval(solveTimer);
+    let timeLeft = 10;
+    timerDisplay.innerText = timeLeft;
+
+    solveTimer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(solveTimer);
+            handleTossUpFailure(playerIndex);
+        }
+    }, 1000);
+    
+    // Override the solve submission logic
+    const originalCheckSolve = window.checkSolve; 
+    window.checkSolve = function() {
+        let isCorrect = solveTiles.every(tile => tile.innerText === tile.dataset.letter);
+
+        if (isCorrect) {
+            // 1. Stop timer but KEEP keyboard visible for now
+            clearInterval(solveTimer);
+            document.getElementById('snd-toss-up').pause();
+
+            // 2. Play win sound immediately
+            const winSnd = document.getElementById('snd-win');
+            winSnd.currentTime = 0;
+            winSnd.play().catch(() => {});
+
+            // 3. Update bank and reveal puzzle
+            playerTotalBanks[currentPlayer] += tossUpValue;
+            document.querySelectorAll('.tile.active.hidden-letter').forEach(t => {
+                t.classList.remove('hidden-letter');
+                t.innerText = t.dataset.letter;
+            });
+
+            // 4. Show the alert while keyboard is still visible
+            alert(`${playerNames[currentPlayer]} SOLVED IT FOR $${tossUpValue.toLocaleString()}!`);
+
+            // 5. NOW hide the keyboard/solve interface
+            document.getElementById('keyboard-container').classList.add('hidden');
+            document.getElementById('solve-overlay').classList.add('hidden');
+            isSolving = false;
+
+            // 6. Wait for the win music to finish before showing leaderboard
+            winSnd.onended = () => {
+                showLeaderboard();
+            };
+
+        } else {
+            clearInterval(solveTimer);
+            handleTossUpFailure(playerIndex);
+        }
+        window.checkSolve = originalCheckSolve; 
+    };
+}
+
+function revealTossUpLetter() {
+    const hiddenTiles = Array.from(document.querySelectorAll('.tile.hidden-letter'));
+    if (hiddenTiles.length <= 1) { // Leave one letter for the end or stop if full
+        clearInterval(tossUpInterval);
+        return;
+    }
+    const randomTile = hiddenTiles[Math.floor(Math.random() * hiddenTiles.length)];
+    randomTile.classList.remove('hidden-letter');
+    randomTile.innerText = randomTile.dataset.letter;
+    document.getElementById('snd-ding').currentTime = 0;
+    document.getElementById('snd-ding').play().catch(() => {});
+}
+
+function handleTossUpFailure(playerIndex) {
+    const wrongSnd = document.getElementById('snd-wrong');
+    wrongSnd.currentTime = 0; 
+    wrongSnd.play().catch(() => {});
+    
+    alert("INCORRECT!");
+    isSolving = false;
+
+    solveTiles.forEach(t => {
+        t.innerText = "";
+        t.classList.add('hidden-letter');
+        t.classList.remove('solving-active');
+    });
+
+    tossUpEligiblePlayers = tossUpEligiblePlayers.filter(p => p !== playerIndex);
+
+    if (tossUpEligiblePlayers.length > 0) {
+        document.getElementById('keyboard-container').classList.add('hidden');
+        document.getElementById('solve-overlay').classList.add('hidden');
+        document.getElementById('toss-up-buttons').classList.remove('hidden');
+        
+        document.querySelectorAll('.buzz-btn').forEach((b, idx) => {
+            b.disabled = !tossUpEligiblePlayers.includes(idx);
+        });
+
+        tossUpInterval = setInterval(revealTossUpLetter, 1000);
+    } else {
+        document.getElementById('snd-toss-up').pause();
+        alert("PUZZLE NOT SOLVED.");
+        setTimeout(showLeaderboard, 2000);
+    }
+}

@@ -449,11 +449,18 @@ body {
     top: -40px; /* Positioned above the keyboard */
     left: 50%;
     transform: translateX(-50%);
+    display: flex !important;
     z-index: 1000;
     pointer-events: none; /* Can't be clicked */
 }
 
+#keyboard-container.hidden, #solve-overlay.hidden {
+    display: none !important;
+}
+
 #timer-text {
+    visibility: visible !important;
+    opacity: 1 !important;
     font-size: 2.5rem;
     color: #ff4757; /* Red timer */
     margin: 0;
@@ -537,4 +544,48 @@ body {
     88% { transform: translate(-50%, -50%) scale(1); opacity: 1; } /* Holds size */
     92% { transform: translate(-50%, -50%) scale(1.2); } /* Quick pop before shrinking */
     100% { transform: translate(-50%, -50%) scale(0); opacity: 0; } /* Shrinks back to nothing */
+}
+
+/* =========================================
+   TOSS-UP STYLES
+   ========================================= */
+#toss-up-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#buzz-buttons-container {
+    display: flex;
+    gap: 20px;
+}
+
+.buzz-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid white;
+    color: white;
+    text-transform: uppercase;
+    transition: transform 0.1s;
+}
+
+.buzz-btn:active { transform: scale(0.95); }
+.buzz-btn:disabled { opacity: 0.5; cursor: not-allowed; border-color: #555; }
+
+/* Assign colors to buzz buttons matching player colors */
+.buzz-p1 { background: #e74c3c; }
+.buzz-p2 { background: #3498db; }
+.buzz-p3 { background: #2ecc71; }
+
+/* Persistent timer visibility during solve */
+body.solving #timer-display, 
+#solve-overlay:not(.hidden) #timer-display {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }

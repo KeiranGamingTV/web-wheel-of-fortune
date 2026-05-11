@@ -106,6 +106,12 @@ Because this project is built with standard front-end technologies, no complex s
 <br/>
 
 # 📝 Changelog
+## - **Version 1.4_beta**
+  - Added three-second timer to call a consonant. The timer does not apply to buying vowels.
+  - Added "Toss-Up" puzzles. (currently in beta testing)
+    - Any help to display the round transitions with better code would be highly appreciated! Look for `let roundTitle` in the `startRoundSequence()` function.
+  - Added another round before the bonus round.
+
 ## - **Version 1.3.5**
   - Added animation for leaderboard.
   - Fixed bug by adding 5ms delay between incorrect buzzer and "No Letter" alert.
