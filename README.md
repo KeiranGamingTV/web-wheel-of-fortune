@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> ## THIS PROJECT IS CURRENTLY PAUSED UNTIL FURTHER NOTICE.
+<hr>
+
+
 # Wheel of Fortune (Web Version)
 <p align="center">
   <a href="https://github.com/KeiranGamingTV/Web-Wheel-Of-Fortune?tab=MIT-1-ov-file#"><img src="https://img.shields.io/badge/MIT_LICENSE-green?style=for-the-badge"/></a>
